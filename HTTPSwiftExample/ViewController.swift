@@ -10,7 +10,12 @@
 //              tornado_example.py 
 //              from the course GitHub repository: tornado_bare, branch sklearn_example
 
-let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
+
+// if you do not know your local sharing server name try:
+//    ifconfig |grep inet   
+// to see what your public facing IP address is, the ip address can be used here
+//let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
+let SERVER_URL = "http://10.8.124.59:8000" // change this for your server name!!!
 
 import UIKit
 
