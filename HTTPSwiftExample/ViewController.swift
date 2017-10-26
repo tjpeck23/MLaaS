@@ -64,6 +64,7 @@ class ViewController: UIViewController, URLSessionDelegate {
                 print("Response:\n%@",response!)
                 let strData = String(data:data!, encoding:String.Encoding(rawValue: String.Encoding.utf8.rawValue))
                 
+                // show to screen
                 DispatchQueue.main.async{
                     self.mainTextView.layer.add(self.animation, forKey: nil)
                     self.mainTextView.text = "\(response!) \n==================\n\(strData!)"
@@ -94,8 +95,8 @@ class ViewController: UIViewController, URLSessionDelegate {
                 // TODO: handle error!
                 print("Response:\n%@",response!)
                 let jsonDictionary = self.convertDataToDictionary(with: data)
-                print("\n\nJSON Data:\n%@",jsonDictionary)
                 
+                // show to screen
                 DispatchQueue.main.async{
                     self.mainTextView.layer.add(self.animation, forKey: nil)
                     self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
@@ -127,7 +128,6 @@ class ViewController: UIViewController, URLSessionDelegate {
                         completionHandler:{(data, response, error) in
                             print("Response:\n%@",response!)
                             let jsonDictionary = self.convertDataToDictionary(with: data)
-                            print("\n\nJSON Data:\n%@",jsonDictionary)
                             
                             DispatchQueue.main.async{
                                 self.mainTextView.layer.add(self.animation, forKey: nil)
