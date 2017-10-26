@@ -15,14 +15,14 @@
 //    ifconfig |grep inet   
 // to see what your public facing IP address is, the ip address can be used here
 //let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
-let SERVER_URL = "http://10.8.124.59:8000" // change this for your server name!!!
+let SERVER_URL = "http://10.8.116.92:8000" // change this for your server name!!!
 
 import UIKit
 
 class ViewController: UIViewController, URLSessionDelegate {
     
     var session = URLSession()
-    var floatValue = 1.5
+    var floatValue = 5.5
     let operationQueue = OperationQueue()
 
     override func viewDidLoad() {
@@ -51,7 +51,7 @@ class ViewController: UIViewController, URLSessionDelegate {
         let dataTask : URLSessionDataTask = self.session.dataTask(with: request,
             completionHandler:{(data, response, error) in
                 // TODO: handle error!
-                print("Response:\n%@",response)
+                print("Response:\n%@",response!)
                 let strData = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
                 NSLog("\n\nData:\n%@",strData!)
         })
@@ -78,7 +78,7 @@ class ViewController: UIViewController, URLSessionDelegate {
         let postTask : URLSessionDataTask = self.session.dataTask(with: request,
             completionHandler:{(data, response, error) in
                 // TODO: handle error!
-                print("Response:\n%@",response)
+                print("Response:\n%@",response!)
                 let jsonDictionary = self.convertDataToDictionary(with: data)
                 print("\n\nJSON Data:\n%@",jsonDictionary)
         })
@@ -106,7 +106,7 @@ class ViewController: UIViewController, URLSessionDelegate {
         
         let postTask : URLSessionDataTask = self.session.dataTask(with: request,
                         completionHandler:{(data, response, error) in
-                            print("Response:\n%@",response)
+                            print("Response:\n%@",response!)
                             let jsonDictionary = self.convertDataToDictionary(with: data)
                             print("\n\nJSON Data:\n%@",jsonDictionary)
         })
