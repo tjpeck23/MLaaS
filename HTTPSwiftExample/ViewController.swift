@@ -24,7 +24,10 @@ class ViewController: UIViewController, URLSessionDelegate {
     var session = URLSession()
     var floatValue = 5.5
     let operationQueue = OperationQueue()
-
+    @IBOutlet weak var mainTextView: UITextView!
+    
+    let animation = CATransition()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -38,6 +41,13 @@ class ViewController: UIViewController, URLSessionDelegate {
         self.session = URLSession(configuration: sessionConfig,
             delegate: self,
             delegateQueue:self.operationQueue)
+        
+        // create reusable animation
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        animation.type = kCATransitionReveal
+        animation.duration = 0.5
+        
+        
     }
 
     //MARK: Get Request
@@ -52,8 +62,12 @@ class ViewController: UIViewController, URLSessionDelegate {
             completionHandler:{(data, response, error) in
                 // TODO: handle error!
                 print("Response:\n%@",response!)
-                let strData = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                NSLog("\n\nData:\n%@",strData!)
+                let strData = String(data:data!, encoding:String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+                
+                DispatchQueue.main.async{
+                    self.mainTextView.layer.add(self.animation, forKey: nil)
+                    self.mainTextView.text = "\(response!) \n==================\n\(strData!)"
+                }
         })
         
         dataTask.resume() // start the task
@@ -81,6 +95,11 @@ class ViewController: UIViewController, URLSessionDelegate {
                 print("Response:\n%@",response!)
                 let jsonDictionary = self.convertDataToDictionary(with: data)
                 print("\n\nJSON Data:\n%@",jsonDictionary)
+                
+                DispatchQueue.main.async{
+                    self.mainTextView.layer.add(self.animation, forKey: nil)
+                    self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
+                }
         })
         
         postTask.resume() // start the task
@@ -109,6 +128,11 @@ class ViewController: UIViewController, URLSessionDelegate {
                             print("Response:\n%@",response!)
                             let jsonDictionary = self.convertDataToDictionary(with: data)
                             print("\n\nJSON Data:\n%@",jsonDictionary)
+                            
+                            DispatchQueue.main.async{
+                                self.mainTextView.layer.add(self.animation, forKey: nil)
+                                self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
+                            }
         })
         
         postTask.resume() // start the task
