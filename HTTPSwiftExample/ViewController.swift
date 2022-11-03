@@ -15,6 +15,7 @@
 //    ifconfig |grep inet   
 // to see what your public facing IP address is, the ip address can be used here
 //let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
+// edit for fun
 let SERVER_URL = "http://10.8.116.92:8000" // change this for your server name!!!
 
 import UIKit
@@ -28,10 +29,12 @@ class ViewController: UIViewController, URLSessionDelegate {
     
     let animation = CATransition()
     
+    //MARK: Setup Session and Animation 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // setup URL Session
         let sessionConfig = URLSessionConfiguration.ephemeral
         
         sessionConfig.timeoutIntervalForRequest = 5.0
