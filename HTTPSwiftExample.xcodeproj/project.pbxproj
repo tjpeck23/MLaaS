@@ -80,8 +80,8 @@
 				B67483DA1ACA2D6800A9970E /* AppDelegate.swift */,
 				B67483DC1ACA2D6800A9970E /* ViewController.swift */,
 				B67483DE1ACA2D6800A9970E /* Main.storyboard */,
-				B67483E11ACA2D6800A9970E /* Images.xcassets */,
 				B67483E31ACA2D6800A9970E /* LaunchScreen.xib */,
+				B67483E11ACA2D6800A9970E /* Images.xcassets */,
 				B67483D81ACA2D6800A9970E /* Supporting Files */,
 			);
 			path = HTTPSwiftExample;
@@ -177,6 +177,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

@@ -28,10 +28,12 @@ class ViewController: UIViewController, URLSessionDelegate {
     
     let animation = CATransition()
     
+    //MARK: Setup Session and Animation 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // setup URL Session
         let sessionConfig = URLSessionConfiguration.ephemeral
         
         sessionConfig.timeoutIntervalForRequest = 5.0
