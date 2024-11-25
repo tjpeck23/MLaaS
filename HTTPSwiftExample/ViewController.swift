@@ -207,6 +207,22 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     
 }
 
+//MARK: Protocol Required Functions
+extension ViewController {
+    func updateDsid(_ newDsid:Int){
+        // delegate function completion handler
+    }
+    
+    func receivedPrediction(_ prediction:[String:Any]){
+        if let labelResponse = prediction["prediction"] as? String{
+            print(labelResponse)
+        }
+        else{
+            print("Received prediction data without label.")
+        }
+    }
+}
+
 
 
 
