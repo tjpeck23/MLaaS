@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		491D70EF2CF4C5F4009AE607 /* MlaasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491D70EE2CF4C5F4009AE607 /* MlaasModel.swift */; };
+		491D70F12CF51ED0009AE607 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 491D70F02CF51ED0009AE607 /* MobileNetV2.mlmodel */; };
 		B67483DB1ACA2D6800A9970E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67483DA1ACA2D6800A9970E /* AppDelegate.swift */; };
 		B67483DD1ACA2D6800A9970E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67483DC1ACA2D6800A9970E /* ViewController.swift */; };
 		B67483E01ACA2D6800A9970E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B67483DE1ACA2D6800A9970E /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		491D70EE2CF4C5F4009AE607 /* MlaasModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MlaasModel.swift; sourceTree = "<group>"; };
+		491D70F02CF51ED0009AE607 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 		B67483D51ACA2D6800A9970E /* HTTPSwiftExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTTPSwiftExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B67483D91ACA2D6800A9970E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B67483DA1ACA2D6800A9970E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				B67483E31ACA2D6800A9970E /* LaunchScreen.xib */,
 				B67483E11ACA2D6800A9970E /* Images.xcassets */,
 				B67483D81ACA2D6800A9970E /* Supporting Files */,
+				491D70F02CF51ED0009AE607 /* MobileNetV2.mlmodel */,
 			);
 			path = HTTPSwiftExample;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			files = (
 				B67483DD1ACA2D6800A9970E /* ViewController.swift in Sources */,
 				B67483DB1ACA2D6800A9970E /* AppDelegate.swift in Sources */,
+				491D70F12CF51ED0009AE607 /* MobileNetV2.mlmodel in Sources */,
 				491D70EF2CF4C5F4009AE607 /* MlaasModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

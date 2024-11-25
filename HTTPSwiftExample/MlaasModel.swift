@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import CoreML
+import Vision
 
 protocol ClientDelegate {
     func updateDsid(_ dsid:Int)
@@ -147,8 +149,71 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
     }
     
+    func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
+        UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
+        image.draw(in: CGRect(origin: .zero, size: targetSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        guard let cgImage = resizedImage?.cgImage else {return nil}
+        
+        let ciImage = CIImage(cgImage: cgImage)
+        let context = CIContext(options: nil)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        var pixelBuffer: CVPixelBuffer?
+        
+        CVPixelBufferCreate(kCFAllocatorDefault, Int(targetSize.width), Int(targetSize.height), kCVPixelFormatType_32ARGB, nil, &pixelBuffer)
+        
+        guard let buffer = pixelBuffer else {return nil}
+        CVPixelBufferLockBaseAddress(buffer, .readOnly)
+        context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y:0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
+        CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
+        
+        return buffer
+    }
     
-    //MARK: These are older methods below. Not sure if we will use them
+    // Extracing feature vectors with CoreML MobileNetV2
+    func extractFeatureVector(from image: UIImage) {
+        guard let pixelBuffer = preprocessImage(image) else {
+            print("Error: could not extract features")
+            return}
+        
+        guard let featureModel = try? MobileNetV2(configuration: MLModelConfiguration()) else{
+            print("Failed to load MobileNetV2 model")
+            return
+        }
+        
+        do {
+            let prediction = try featureModel.prediction(image: pixelBuffer)
+        } catch {
+            print("Error during feature extraction: \(error)")
+            return
+        }
+    }
+    
+    func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
+        guard let pixelBuffer: CVPixelBuffer = preprocessImage(image) else {
+            print("Failed to preprocess image")
+            return
+        }
+        
+        guard let featureVector = extractFeatureVector(from: pixelBuffer) else {
+            print("Failed to extract feature vector")
+            return
+        }
+        
+        let dataToSend = [
+            "features": featureVector,
+            "label": label
+        ]
+        
+        let jsonData = try? convertDictionaryToData(with: dataToSend)
+        
+        sendData(_: jsonData, withLabel: label)
+    }
+    
+    
+    //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
     
     func sendGetRequest(request: URLRequest, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
             let dataTask = session.dataTask(with: request) { data, response, error in
