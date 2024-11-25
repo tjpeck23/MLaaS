@@ -21,10 +21,11 @@ import UIKit
 
 class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    var session = URLSession()
+    let model = MlaasModel()
     var floatValue = 5.5
     let operationQueue = OperationQueue()
     let imagePicker = UIImagePickerController()
+    var featureImage: UIImage?
     
     @IBOutlet weak var mainTextView: UITextView!
     
@@ -36,15 +37,7 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         // Do any additional setup after loading the view, typically from a nib.
         
         // setup URL Session
-        let sessionConfig = URLSessionConfiguration.ephemeral
         
-        sessionConfig.timeoutIntervalForRequest = 5.0
-        sessionConfig.timeoutIntervalForResource = 8.0
-        sessionConfig.httpMaximumConnectionsPerHost = 1
-        
-        self.session = URLSession(configuration: sessionConfig,
-            delegate: self,
-            delegateQueue:self.operationQueue)
         
         // create reusable animation
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
@@ -62,29 +55,35 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     //MARK: Get Request
-    @IBAction func sendGetRequest(_ sender: AnyObject) {
-        // create a GET request and get the reponse back as NSData
+    @IBAction func sendGetRequest(_ sender: AnyObject)  {
+        // Create GET request
         let baseURL = "\(SERVER_URL)/GetExample"
         let query = "?arg=\(self.floatValue)"
+        guard let getUrl = URL(string: "\(baseURL)\(query)") else { return }
+        let request = URLRequest(url: getUrl)
         
-        let getUrl = URL(string: "\(baseURL)\(query)")
-        let request: URLRequest = URLRequest(url: getUrl!)
-        let dataTask : URLSessionDataTask = self.session.dataTask(with: request,
-            completionHandler:{(data, response, error) in
-                // TODO: handle error!
-                print("Response:\n%@",response!)
-                let strData = String(data:data!, encoding:String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-                
-                // show to screen
-                DispatchQueue.main.async{
-                    self.mainTextView.layer.add(self.animation, forKey: nil)
-                    self.mainTextView.text = "\(response!) \n==================\n\(strData!)"
+        model.sendGetRequest(request: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.mainTextView.text = "Error: \(error.localizedDescription)"
                 }
-        })
-        
-        dataTask.resume() // start the task
-        
+                return
+            }
+            
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    self.mainTextView.layer.add(self.animation, forKey: nil)
+                    self.mainTextView.text = "Response: \(response!) \n==================\n\(responseString)"
+                }
+            }
+        }
     }
+        //dataTask.resume() // start the task
+        
+    
     
     //MARK: Post Request, args in url
     @IBAction func sendPostRequest(_ sender: AnyObject) {
@@ -101,20 +100,43 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         request.httpMethod = "POST"
         request.httpBody = requestBody
         
-        let postTask : URLSessionDataTask = self.session.dataTask(with: request,
-            completionHandler:{(data, response, error) in
+        model.sendPostRequest(request: request) { [weak self] data, response, error in
+            guard let self = self else { return}
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+            
+            let jsonDictionary = model.convertDataToDictionary(with: data)
+            
+            DispatchQueue.main.async{
+                self.mainTextView.layer.add(self.animation, forKey: nil)
+                self.mainTextView.text = """
+                ResponseL \(response!)
+                ===============
+                \(jsonDictionary)
+                """
+            }
+        }
+        //let postTask : URLSessionDataTask = self.session.dataTask(with: request,
+            //completionHandler:{(data, response, error) in
                 // TODO: handle error!
-                print("Response:\n%@",response!)
-                let jsonDictionary = self.convertDataToDictionary(with: data)
+                //print("Response:\n%@",response!)
+                //let jsonDictionary = self.convertDataToDictionary(with: data)
                 
                 // show to screen
-                DispatchQueue.main.async{
-                    self.mainTextView.layer.add(self.animation, forKey: nil)
-                    self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
-                }
-        })
+                //DispatchQueue.main.async{
+                    //self.mainTextView.layer.add(self.animation, forKey: nil)
+                    //self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
+            
         
-        postTask.resume() // start the task
+        
+        //postTask.resume() // start the task
     }
     
     //MARK: Post Request, args in request body (preferred)
@@ -130,60 +152,59 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         let jsonUpload:NSDictionary = ["arg":[3.2,self.floatValue*2,self.floatValue]]
         
         
-        let requestBody:Data? = self.convertDictionaryToData(with:jsonUpload)
+        let requestBody:Data? = model.convertDictionaryToData(with:jsonUpload)
     
         request.httpMethod = "POST"
         request.httpBody = requestBody
         
-        let postTask : URLSessionDataTask = self.session.dataTask(with: request,
-                        completionHandler:{(data, response, error) in
-                            print("Response:\n%@",response!)
-                            let jsonDictionary = self.convertDataToDictionary(with: data)
-                            
-                            DispatchQueue.main.async{
-                                self.mainTextView.layer.add(self.animation, forKey: nil)
-                                self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
-                            }
-        })
+        model.sendPostWithJsonInBody(request: request) { [weak self] data, response, error in
+            guard let self else { return }
+            
+            if let error = error{
+                print("Error: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received.")
+                return
+            }
+            
+            let jsonDictionary = model.convertDataToDictionary(with: data)
+            
+            DispatchQueue.main.async{
+                self.mainTextView.layer.add(self.animation, forKey: nil)
+                self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
+            }
+        }
         
-        postTask.resume() // start the task
+        //let postTask : URLSessionDataTask = self.session.dataTask(with: request,
+                        //completionHandler:{(data, response, error) in
+                            //print("Response:\n%@",response!)
+                            //let jsonDictionary = self.convertDataToDictionary(with: data)
+                            
+                            //DispatchQueue.main.async{
+                                //self.mainTextView.layer.add(self.animation, forKey: nil)
+                                //self.mainTextView.text = "\(response!) \n==================\n\(jsonDictionary)"
+                            //}
+        //})
+        
+        //postTask.resume() // start the task
         
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            print("Image Selected: \(image)")
+            featureImage = image
+            mainTextView.text = "Image Successfully Uploaded"
         } else {
             print("No valid image found.")
         }
         picker.dismiss(animated: true, completion: nil) // Dismiss the picker after selection
     }
     
-    //MARK: JSON Conversion Functions
-    func convertDictionaryToData(with jsonUpload:NSDictionary) -> Data?{
-        do { // try to make JSON and deal with errors using do/catch block
-            let requestBody = try JSONSerialization.data(withJSONObject: jsonUpload, options:JSONSerialization.WritingOptions.prettyPrinted)
-            return requestBody
-        } catch {
-            print("json error: \(error.localizedDescription)")
-            return nil
-        }
-    }
+    // Create function to upload feature data with label
     
-    func convertDataToDictionary(with data:Data?)->NSDictionary{
-        do { // try to parse JSON and deal with errors using do/catch block
-            let jsonDictionary: NSDictionary =
-                try JSONSerialization.jsonObject(with: data!,
-                                              options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-            
-            return jsonDictionary
-            
-        } catch {
-            print("json error: \(error.localizedDescription)")
-            return NSDictionary() // just return empty
-        }
-    }
-
 }
 
 
