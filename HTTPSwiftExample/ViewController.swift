@@ -7,28 +7,30 @@
 //
 
 // This exampe is meant to be run with the python example:
-//              tornado_example.py 
+//              tornado_example.py
 //              from the course GitHub repository: tornado_bare, branch sklearn_example
 
 
 // if you do not know your local sharing server name try:
-//    ifconfig |grep inet   
+//    ifconfig |grep inet
 // to see what your public facing IP address is, the ip address can be used here
 //let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
-let SERVER_URL = "http://10.8.116.92:8000" // change this for your server name!!!
+let SERVER_URL = "http://127.0.0.1:8000" // change this for your server name!!!
 
 import UIKit
 
-class ViewController: UIViewController, URLSessionDelegate {
+class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var session = URLSession()
     var floatValue = 5.5
     let operationQueue = OperationQueue()
+    let imagePicker = UIImagePickerController()
+    
     @IBOutlet weak var mainTextView: UITextView!
     
     let animation = CATransition()
     
-    //MARK: Setup Session and Animation 
+    //MARK: Setup Session and Animation
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -52,6 +54,13 @@ class ViewController: UIViewController, URLSessionDelegate {
         
     }
 
+    @IBAction func pickImageButton(_ sender: UIButton) {
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = false
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
     //MARK: Get Request
     @IBAction func sendGetRequest(_ sender: AnyObject) {
         // create a GET request and get the reponse back as NSData
@@ -139,6 +148,16 @@ class ViewController: UIViewController, URLSessionDelegate {
         
         postTask.resume() // start the task
         
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let image = info[.originalImage] as? UIImage {
+            print("Image Selected: \(image)")
+        } else {
+            print("No valid image found.")
+        }
+
     }
     
     //MARK: JSON Conversion Functions
