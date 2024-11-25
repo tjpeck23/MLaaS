@@ -47,8 +47,8 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
             delegateQueue:self.operationQueue)
         
         // create reusable animation
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        animation.type = kCATransitionReveal
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        animation.type = CATransitionType.reveal
         animation.duration = 0.5
         
         
@@ -151,13 +151,12 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let image = info[.originalImage] as? UIImage {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             print("Image Selected: \(image)")
         } else {
             print("No valid image found.")
         }
-
+        picker.dismiss(animated: true, completion: nil) // Dismiss the picker after selection
     }
     
     //MARK: JSON Conversion Functions
