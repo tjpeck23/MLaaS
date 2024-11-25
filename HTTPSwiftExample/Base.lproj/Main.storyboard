@@ -52,9 +52,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
-                                <rect key="frame" x="252" y="142" width="107" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
+                                <rect key="frame" x="252" y="28" width="107" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Pick Image"/>
                                 <connections>
@@ -66,17 +65,17 @@
                         <constraints>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="2AE-kH-6oW"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="I7R-07-pqO" secondAttribute="bottom" constant="20" id="5pK-hA-78x"/>
-                            <constraint firstItem="hnx-72-uCy" firstAttribute="leading" secondItem="Q83-th-e1u" secondAttribute="leading" id="JWg-6I-vMG"/>
+                            <constraint firstItem="Q83-th-e1u" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="PXH-QA-0br"/>
+                            <constraint firstItem="HFP-hX-See" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="RJ2-T2-UmG"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hnx-72-uCy" secondAttribute="trailing" constant="20" symbolic="YES" id="SsP-kC-bQf"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="TlQ-am-o3L"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kXJ-SL-qGM" secondAttribute="trailing" constant="20" symbolic="YES" id="TyE-FT-2zL"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Q83-th-e1u" secondAttribute="trailing" constant="20" symbolic="YES" id="UES-yV-big"/>
                             <constraint firstItem="hnx-72-uCy" firstAttribute="top" secondItem="kXJ-SL-qGM" secondAttribute="bottom" constant="8" symbolic="YES" id="UgK-H7-DDr"/>
+                            <constraint firstItem="HFP-hX-See" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="252" id="Up8-Kl-4iA"/>
                             <constraint firstItem="hnx-72-uCy" firstAttribute="leading" secondItem="I7R-07-pqO" secondAttribute="leading" id="WkB-OQ-lZK"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="top" secondItem="hnx-72-uCy" secondAttribute="bottom" constant="19" id="Wy5-SB-4g0"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ioU-ed-56v"/>
-                            <constraint firstItem="hnx-72-uCy" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="104" id="j02-9G-dt2"/>
-                            <constraint firstItem="hnx-72-uCy" firstAttribute="leading" secondItem="kXJ-SL-qGM" secondAttribute="leading" id="pNL-na-EnT"/>
+                            <constraint firstItem="kXJ-SL-qGM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="jRg-cl-CD8"/>
+                            <constraint firstItem="kXJ-SL-qGM" firstAttribute="top" secondItem="Q83-th-e1u" secondAttribute="bottom" constant="8" symbolic="YES" id="rKr-vb-oKA"/>
                             <constraint firstItem="Q83-th-e1u" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="uM4-wo-hoQ"/>
                         </constraints>
                     </view>

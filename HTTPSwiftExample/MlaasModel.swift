@@ -149,6 +149,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
     }
     
+    // Converts image to pixel buffer
     func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         image.draw(in: CGRect(origin: .zero, size: targetSize))
@@ -173,31 +174,34 @@ class MlaasModel: NSObject, URLSessionDelegate {
     }
     
     // Extracing feature vectors with CoreML MobileNetV2
-    func extractFeatureVector(from image: UIImage) {
+    func extractFeatureVector(from image: UIImage) -> [Double]? {
         guard let pixelBuffer = preprocessImage(image) else {
             print("Error: could not extract features")
-            return}
+            return nil}
         
         guard let featureModel = try? MobileNetV2(configuration: MLModelConfiguration()) else{
             print("Failed to load MobileNetV2 model")
-            return
+            return nil
         }
         
         do {
             let prediction = try featureModel.prediction(image: pixelBuffer)
+            if let featureArray = prediction.featureValue(for: "feature")?.multiArrayValue {
+                return featureArray.toDoubleArray()
+            } else {
+                return nil
+            }
         } catch {
             print("Error during feature extraction: \(error)")
-            return
-        }
-    }
-    
-    func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
-        guard let pixelBuffer: CVPixelBuffer = preprocessImage(image) else {
-            print("Failed to preprocess image")
-            return
+            return nil
         }
         
-        guard let featureVector = extractFeatureVector(from: pixelBuffer) else {
+    }
+    
+    // Function that combines our preprocessing functions and sends to server
+    func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
+        
+        guard let featureVector = extractFeatureVector(from: image) else {
             print("Failed to extract feature vector")
             return
         }
@@ -205,11 +209,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
         let dataToSend = [
             "features": featureVector,
             "label": label
-        ]
+        ] as [String : Any]
         
-        let jsonData = try? convertDictionaryToData(with: dataToSend)
-        
-        sendData(_: jsonData, withLabel: label)
+        sendData(_: dataToSend["features"] as! [Double], withLabel: dataToSend["label"] as! String)
     }
     
     
@@ -261,5 +263,16 @@ class MlaasModel: NSObject, URLSessionDelegate {
             print("json error: \(error.localizedDescription)")
             return NSDictionary()
         }
+    }
+}
+
+extension MLMultiArray {
+    func toDoubleArray() -> [Double]? {
+        let count = self.count
+        var doubleArray = [Double](repeating: 0.0, count: count)
+        for i in 0..<count {
+            doubleArray[i] = self[i].doubleValue
+        }
+        return doubleArray
     }
 }
