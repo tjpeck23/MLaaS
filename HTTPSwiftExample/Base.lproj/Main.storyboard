@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="4lU-wR-6xy">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,17 +20,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q83-th-e1u">
-                                <rect key="frame" x="16" y="28" width="124" height="30"/>
-                                <state key="normal" title="Send Get Request">
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendGetRequest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bFr-sd-tCK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXJ-SL-qGM">
-                                <rect key="frame" x="16" y="66" width="130" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXJ-SL-qGM">
+                                <rect key="frame" x="16" y="91" width="130" height="30"/>
                                 <state key="normal" title="Send Post Request">
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -37,8 +29,8 @@
                                     <action selector="sendPostRequest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YEd-mM-jkK"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnx-72-uCy">
-                                <rect key="frame" x="16" y="104" width="146" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnx-72-uCy">
+                                <rect key="frame" x="16" y="126" width="146" height="30"/>
                                 <state key="normal" title="Send Post with JSON">
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -52,12 +44,30 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
-                                <rect key="frame" x="252" y="28" width="107" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
+                                <rect key="frame" x="249" y="48" width="107" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Pick Image"/>
                                 <connections>
                                     <action selector="pickImageButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d08-ZA-HFb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvz-fi-tBH">
+                                <rect key="frame" x="246" y="91" width="113" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Check Face"/>
+                                <connections>
+                                    <action selector="checkIfFaceMatchesPrediction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="M3r-mM-bdI"/>
+                                    <segue destination="ieQ-7B-JY9" kind="push" identifier="FaceScanViewControllerSegue" id="m5E-Xv-MfX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q83-th-e1u">
+                                <rect key="frame" x="16" y="50" width="124" height="30"/>
+                                <state key="normal" title="Send Get Request">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="sendGetRequest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bFr-sd-tCK"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -65,27 +75,73 @@
                         <constraints>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="2AE-kH-6oW"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="I7R-07-pqO" secondAttribute="bottom" constant="20" id="5pK-hA-78x"/>
+                            <constraint firstAttribute="trailing" secondItem="Bvz-fi-tBH" secondAttribute="trailing" constant="16" id="CZO-Po-mxb"/>
+                            <constraint firstItem="HFP-hX-See" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="LfM-2n-tqN"/>
                             <constraint firstItem="Q83-th-e1u" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="PXH-QA-0br"/>
-                            <constraint firstItem="HFP-hX-See" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="RJ2-T2-UmG"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hnx-72-uCy" secondAttribute="trailing" constant="20" symbolic="YES" id="SsP-kC-bQf"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="TlQ-am-o3L"/>
                             <constraint firstItem="hnx-72-uCy" firstAttribute="top" secondItem="kXJ-SL-qGM" secondAttribute="bottom" constant="8" symbolic="YES" id="UgK-H7-DDr"/>
-                            <constraint firstItem="HFP-hX-See" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="252" id="Up8-Kl-4iA"/>
                             <constraint firstItem="hnx-72-uCy" firstAttribute="leading" secondItem="I7R-07-pqO" secondAttribute="leading" id="WkB-OQ-lZK"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="top" secondItem="hnx-72-uCy" secondAttribute="bottom" constant="19" id="Wy5-SB-4g0"/>
+                            <constraint firstAttribute="trailing" secondItem="HFP-hX-See" secondAttribute="trailing" constant="16" id="hDU-8E-4iz"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ioU-ed-56v"/>
                             <constraint firstItem="kXJ-SL-qGM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="jRg-cl-CD8"/>
                             <constraint firstItem="kXJ-SL-qGM" firstAttribute="top" secondItem="Q83-th-e1u" secondAttribute="bottom" constant="8" symbolic="YES" id="rKr-vb-oKA"/>
                             <constraint firstItem="Q83-th-e1u" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="uM4-wo-hoQ"/>
+                            <constraint firstItem="Bvz-fi-tBH" firstAttribute="firstBaseline" secondItem="HFP-hX-See" secondAttribute="baseline" constant="43" symbolType="layoutAnchor" id="wx6-Nz-UtY"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="egD-s7-qfs"/>
                     <connections>
+                        <outlet property="checkFaceButton" destination="Bvz-fi-tBH" id="mlb-Rd-Myz"/>
                         <outlet property="mainTextView" destination="I7R-07-pqO" id="sEf-ID-vJd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1263.2" y="264.91754122938534"/>
+        </scene>
+        <!--Face Scan View Controller-->
+        <scene sceneID="hmh-uO-LZS">
+            <objects>
+                <viewController id="ieQ-7B-JY9" customClass="FaceScanViewController" customModule="HTTPSwiftExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jTE-ga-3x2"/>
+                        <viewControllerLayoutGuide type="bottom" id="5WU-2W-YLl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QgS-ej-7x1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="iTJ-1A-lWj"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jg7-X5-PyN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1968.8" y="264.91754122938534"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="eab-NM-8Bt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4lU-wR-6xy" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rPw-eF-ISM">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="zpj-bA-jYm"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zav-NJ-QTJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="324" y="264.91754122938534"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

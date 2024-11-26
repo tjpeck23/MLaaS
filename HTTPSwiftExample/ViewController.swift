@@ -29,6 +29,7 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     
     @IBOutlet weak var mainTextView: UITextView!
     
+    @IBOutlet weak var checkFaceButton: UIButton!
     let animation = CATransition()
     
     //MARK: Setup Session and Animation
@@ -52,6 +53,11 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = false
         present(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func checkIfFaceMatchesPrediction(_ sender: Any) {
+        //performSegue(withIdentifier: "FaceScanViewControllerSegue", sender: self)
     }
     
     //MARK: Get Request
@@ -204,6 +210,15 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     // Create function to upload feature data with label
+    
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "FaceScanViewController" {
+            if let faceScanVC = segue.destination as? FaceScanViewController {
+                faceScanVC.delegate = self
+            }
+        }
+    }*/
+    
     
 }
 
