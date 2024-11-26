@@ -47,6 +47,16 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDataViewController" {  // Ensure this matches the identifier in the storyboard
+            if let dataVC = segue.destination as? DataViewController {
+                // Pass data to DataViewController
+                dataVC.featureImage = self.featureImage
+            }
+        }
+    }
+
 
     @IBAction func pickImageButton(_ sender: UIButton) {
         imagePicker.delegate = self
@@ -59,6 +69,10 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     @IBAction func checkIfFaceMatchesPrediction(_ sender: Any) {
         //performSegue(withIdentifier: "FaceScanViewControllerSegue", sender: self)
     }
+    
+    @IBAction func DataButton(_ sender: UIButton) {
+    }
+    
     
     //MARK: Get Request
     @IBAction func sendGetRequest(_ sender: AnyObject)  {

@@ -8,6 +8,59 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Data View Controller-->
+        <scene sceneID="q90-eV-8OO">
+            <objects>
+                <viewController id="K64-Ri-AXi" customClass="DataViewController" customModule="HTTPSwiftExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gMT-vF-6hT"/>
+                        <viewControllerLayoutGuide type="bottom" id="5fd-rx-1zt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TKu-f7-BkB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter Label" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
+                                <rect key="frame" x="137" y="221" width="101" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
+                                <rect key="frame" x="104" y="102" width="166" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
+                                <rect key="frame" x="150" y="338" width="75" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                <connections>
+                                    <action selector="sendDataButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="6wB-nA-UUh"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="yvS-fr-lM6" firstAttribute="top" secondItem="Kbs-Ho-yMp" secondAttribute="bottom" constant="38" id="5QB-kX-ZXN"/>
+                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="7w5-BR-Wra"/>
+                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="E0J-Vu-Gfc"/>
+                            <constraint firstItem="K3e-6I-YmT" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="OGS-lG-vTh"/>
+                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="YLR-qH-T5O"/>
+                            <constraint firstItem="K3e-6I-YmT" firstAttribute="firstBaseline" secondItem="yvS-fr-lM6" secondAttribute="baseline" constant="32" symbolType="layoutAnchor" id="c27-Zk-d6j"/>
+                            <constraint firstItem="yvS-fr-lM6" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="f7j-Yj-mpR"/>
+                            <constraint firstItem="K3e-6I-YmT" firstAttribute="leading" secondItem="TKu-f7-BkB" secondAttribute="leading" constant="150" id="oIF-eZ-PWN"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ie3-Ff-CxR"/>
+                    <connections>
+                        <outlet property="dataLabelOutlet" destination="yvS-fr-lM6" id="0hl-iI-1hf"/>
+                        <outlet property="ipOutlet" destination="Kbs-Ho-yMp" id="hm3-rp-C10"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1266" y="-422"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
@@ -70,9 +123,19 @@
                                     <action selector="sendGetRequest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bFr-sd-tCK"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vy4-z2-j5L">
+                                <rect key="frame" x="191" y="157" width="184" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Send Labelled Image"/>
+                                <connections>
+                                    <action selector="DataButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jGk-nT-K63"/>
+                                    <segue destination="K64-Ri-AXi" kind="push" identifier="ShowDataViewController" id="m5c-on-uc1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="vy4-z2-j5L" firstAttribute="top" secondItem="Bvz-fi-tBH" secondAttribute="bottom" constant="8" symbolic="YES" id="1jl-Oi-lBg"/>
                             <constraint firstItem="I7R-07-pqO" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="2AE-kH-6oW"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="I7R-07-pqO" secondAttribute="bottom" constant="20" id="5pK-hA-78x"/>
                             <constraint firstAttribute="trailing" secondItem="Bvz-fi-tBH" secondAttribute="trailing" constant="16" id="CZO-Po-mxb"/>

@@ -156,7 +156,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        guard let cgImage = resizedImage?.cgImage else {return nil}
+        guard let cgImage = resizedImage?.cgImage else {
+            print("Could not convert image to cgimage")
+            return nil}
         
         let ciImage = CIImage(cgImage: cgImage)
         let context = CIContext(options: nil)
@@ -165,7 +167,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
         CVPixelBufferCreate(kCFAllocatorDefault, Int(targetSize.width), Int(targetSize.height), kCVPixelFormatType_32ARGB, nil, &pixelBuffer)
         
-        guard let buffer = pixelBuffer else {return nil}
+        guard let buffer = pixelBuffer else {
+            print("Could not convert image to pixel buffer")
+            return nil}
         CVPixelBufferLockBaseAddress(buffer, .readOnly)
         context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y:0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
         CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
@@ -201,6 +205,8 @@ class MlaasModel: NSObject, URLSessionDelegate {
     // Function that combines our preprocessing functions and sends to server
     func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
         
+        extractFeatureVector(from: image)
+        
         guard let featureVector = extractFeatureVector(from: image) else {
             print("Failed to extract feature vector")
             return
@@ -211,7 +217,14 @@ class MlaasModel: NSObject, URLSessionDelegate {
             "label": label
         ] as [String : Any]
         
-        sendData(_: dataToSend["features"] as! [Double], withLabel: dataToSend["label"] as! String)
+        
+        if !label.isEmpty {
+                // If label exists, send data with label
+                sendData(featureVector, withLabel: label)
+            } else {
+                // If no label, send data without label
+                sendData(featureVector)
+            }
     }
     
     
