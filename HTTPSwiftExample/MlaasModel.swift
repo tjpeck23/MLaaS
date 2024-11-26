@@ -150,7 +150,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     }
     
     // Converts image to pixel buffer
-    func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
+    /*func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         image.draw(in: CGRect(origin: .zero, size: targetSize))
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -173,12 +173,88 @@ class MlaasModel: NSObject, URLSessionDelegate {
         CVPixelBufferLockBaseAddress(buffer, .readOnly)
         context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y:0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
         CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
-        
+        return buffer
+    }*/
+    func preprocessImage(_ image: UIImage, targetSize: CGSize = CGSize(width: 224, height: 224)) -> CVPixelBuffer? {
+        UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
+        image.draw(in: CGRect(origin: .zero, size: targetSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        guard let cgImage = resizedImage?.cgImage else {
+            print("Could not convert image to CGImage")
+            return nil
+        }
+
+        let ciImage = CIImage(cgImage: cgImage)
+        let context = CIContext(options: nil)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+
+        var pixelBuffer: CVPixelBuffer?
+
+        // Create the pixel buffer with the appropriate dimensions and color format
+        let status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                         Int(targetSize.width),
+                                         Int(targetSize.height),
+                                         kCVPixelFormatType_32ARGB,
+                                         nil,
+                                         &pixelBuffer)
+
+        guard status == kCVReturnSuccess, let buffer = pixelBuffer else {
+            print("Could not convert image to pixel buffer")
+            return nil
+        }
+
+        // Lock the buffer base address for read-only access
+        CVPixelBufferLockBaseAddress(buffer, .readOnly)
+
+        // Render the CIImage into the pixel buffer
+        context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
+
+        // Unlock the base address after rendering
+        CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
+
         return buffer
     }
     
+    func pixelBufferToDoubleArray(pixelBuffer: CVPixelBuffer) -> [Double]? {
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        
+        let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        
+        // Get the raw pixel data as an array of bytes
+        let bufferPointer = baseAddress!.assumingMemoryBound(to: UInt8.self)
+        
+        var doubleArray: [Double] = []
+        
+        for row in 0..<height {
+            for col in 0..<width {
+                let offset = row * bytesPerRow + col * 4  // Assuming ARGB (4 bytes per pixel)
+                
+                // Get the ARGB values from the pixel buffer
+                let blue = Double(bufferPointer[offset])
+                let green = Double(bufferPointer[offset + 1])
+                let red = Double(bufferPointer[offset + 2])
+                let alpha = Double(bufferPointer[offset + 3])
+                
+                // Add the ARGB values to the array (or use any other logic you need)
+                doubleArray.append(contentsOf: [red, green, blue, alpha])
+            }
+        }
+        
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        
+        return doubleArray
+    }
+
+
+    
+    
     // Extracing feature vectors with CoreML MobileNetV2
-    func extractFeatureVector(from image: UIImage) -> [Double]? {
+    /* func extractFeatureVector(from image: UIImage) -> [Double]? {
         guard let pixelBuffer = preprocessImage(image) else {
             print("Error: could not extract features")
             return nil}
@@ -188,11 +264,18 @@ class MlaasModel: NSObject, URLSessionDelegate {
             return nil
         }
         
+        
         do {
             let prediction = try featureModel.prediction(image: pixelBuffer)
+            print("Model Description: \(featureModel.model.modelDescription)")
+
+
+            // This is where the error is happening
             if let featureArray = prediction.featureValue(for: "feature")?.multiArrayValue {
+                print(featureArray.toDoubleArray())
                 return featureArray.toDoubleArray()
             } else {
+                print("Could not get feature vector from model")
                 return nil
             }
         } catch {
@@ -201,29 +284,36 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         
     }
+    */
     
     // Function that combines our preprocessing functions and sends to server
     func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
         
-        extractFeatureVector(from: image)
         
-        guard let featureVector = extractFeatureVector(from: image) else {
-            print("Failed to extract feature vector")
-            return
-        }
+        guard let pixelBuffer = preprocessImage(image) else {
+                print("Error: Could not preprocess image")
+                return
+            }
+
+            // Convert pixel buffer to an array of doubles
+        guard let dataVector = pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
+                print("Error: Could not convert pixel buffer to data vector")
+                return
+            }
+        
         
         let dataToSend = [
-            "features": featureVector,
+            "features": dataVector,
             "label": label
         ] as [String : Any]
         
         
         if !label.isEmpty {
                 // If label exists, send data with label
-                sendData(featureVector, withLabel: label)
+                sendData(dataVector, withLabel: label)
             } else {
                 // If no label, send data without label
-                sendData(featureVector)
+                sendData(dataVector)
             }
     }
     
