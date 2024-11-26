@@ -32,12 +32,12 @@ class DataViewController: UIViewController {
             return
         }
         
-        featureImage = selectedImage
+        var vector = selectedImage
         
         let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
-        mlaasmodel.uploadImageWithLabel(image: featureImage!, label: label, server_ip: userip)
+        mlaasmodel.uploadImageWithLabel(image: vector, label: label, server_ip: userip)
         
     }
     
