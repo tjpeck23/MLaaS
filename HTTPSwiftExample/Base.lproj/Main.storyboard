@@ -31,11 +31,20 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
-                                <rect key="frame" x="150" y="338" width="75" height="35"/>
+                                <rect key="frame" x="136" y="338" width="104" height="35"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Send Data"/>
                                 <connections>
                                     <action selector="sendDataButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="6wB-nA-UUh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-7F-1zm">
+                                <rect key="frame" x="131" y="475" width="113" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Train Model"/>
+                                <connections>
+                                    <action selector="trainButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="TgD-sk-dr1"/>
                                 </connections>
                             </button>
                         </subviews>

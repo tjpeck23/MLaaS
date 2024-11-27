@@ -242,7 +242,7 @@ extension ViewController {
         // delegate function completion handler
     }
     
-    func receivedPrediction(_ prediction:[String:Any]){
+    func receivedPrediction(_ prediction: [String:Any]){
         if let labelResponse = prediction["prediction"] as? String{
             print(labelResponse)
         }

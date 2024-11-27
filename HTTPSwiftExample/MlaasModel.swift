@@ -81,6 +81,16 @@ class MlaasModel: NSObject, URLSessionDelegate {
         })
         postTask.resume()
     }
+    func trainModel() {
+        let baseURL = "http://\(server_ip):8000/train_model_turi/\(self.dsid)"
+        let postUrl = URL(string: "\(baseURL)")
+        
+        var request = URLRequest(url: postUrl!)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
+    }
     
     func sendData(_ array:[Double]){
         let baseURL = "http://\(server_ip):8000/predict_turi/"
@@ -150,32 +160,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
     }
     
-    // Converts image to pixel buffer
-    /*func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
-        UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
-        image.draw(in: CGRect(origin: .zero, size: targetSize))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        guard let cgImage = resizedImage?.cgImage else {
-            print("Could not convert image to cgimage")
-            return nil}
-        
-        let ciImage = CIImage(cgImage: cgImage)
-        let context = CIContext(options: nil)
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        var pixelBuffer: CVPixelBuffer?
-        
-        CVPixelBufferCreate(kCFAllocatorDefault, Int(targetSize.width), Int(targetSize.height), kCVPixelFormatType_32ARGB, nil, &pixelBuffer)
-        
-        guard let buffer = pixelBuffer else {
-            print("Could not convert image to pixel buffer")
-            return nil}
-        CVPixelBufferLockBaseAddress(buffer, .readOnly)
-        context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y:0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
-        CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
-        return buffer
-    }*/
     func preprocessImage(_ image: UIImage, targetSize: CGSize = CGSize(width: 224, height: 224)) -> CVPixelBuffer? {
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         image.draw(in: CGRect(origin: .zero, size: targetSize))
@@ -254,41 +238,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
         return doubleArray
     }
 
-
-    
-    
-    // Extracing feature vectors with CoreML MobileNetV2
-    /* func extractFeatureVector(from image: UIImage) -> [Double]? {
-        guard let pixelBuffer = preprocessImage(image) else {
-            print("Error: could not extract features")
-            return nil}
-        
-        guard let featureModel = try? MobileNetV2(configuration: MLModelConfiguration()) else{
-            print("Failed to load MobileNetV2 model")
-            return nil
-        }
-        
-        
-        do {
-            let prediction = try featureModel.prediction(image: pixelBuffer)
-            print("Model Description: \(featureModel.model.modelDescription)")
-
-
-            // This is where the error is happening
-            if let featureArray = prediction.featureValue(for: "feature")?.multiArrayValue {
-                print(featureArray.toDoubleArray())
-                return featureArray.toDoubleArray()
-            } else {
-                print("Could not get feature vector from model")
-                return nil
-            }
-        } catch {
-            print("Error during feature extraction: \(error)")
-            return nil
-        }
-        
-    }
-    */
     
     // Function that combines our preprocessing functions and sends to server
     func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
