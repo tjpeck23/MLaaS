@@ -24,6 +24,8 @@ class FaceScanViewController: UIViewController  {
     var videoDataOutput: AVCaptureVideoDataOutput?
     var videoDataOutputQueue: DispatchQueue?
     
+    var photoDataOutput: AVCapturePhotoOutput?
+    
     var captureDevice: AVCaptureDevice?
     var captureDeviceResolution: CGSize = CGSize()
     
@@ -531,13 +533,13 @@ class FaceScanViewController: UIViewController  {
         /// - Tag: CreateSerialDispatchQueue
         fileprivate func configureVideoDataOutput(for inputDevice: AVCaptureDevice, resolution: CGSize, captureSession: AVCaptureSession) {
             
-            let videoDataOutput = AVCaptureVideoDataOutput()
-            videoDataOutput.alwaysDiscardsLateVideoFrames = true
+            let videoDataOutput = AVCapturePhotoOutput()
+            //videoDataOutput.alwaysDiscardsLateVideoFrames = true
             
             // Create a serial dispatch queue used for the sample buffer delegate as well as when a still image is captured.
             // A serial dispatch queue must be used to guarantee that video frames will be delivered in order.
-            let videoDataOutputQueue = DispatchQueue(label: "com.example.apple-samplecode.VisionFaceTrack")
-            videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+            //let videoDataOutputQueue = DispatchQueue(label: "com.example.apple-samplecode.VisionFaceTrack")
+            //videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
             
             if captureSession.canAddOutput(videoDataOutput) {
                 captureSession.addOutput(videoDataOutput)
@@ -551,12 +553,14 @@ class FaceScanViewController: UIViewController  {
                 }
             }
             
-            self.videoDataOutput = videoDataOutput
-            self.videoDataOutputQueue = videoDataOutputQueue
+            self.photoDataOutput = videoDataOutput
+            //self.videoDataOutputQueue = videoDataOutputQueue
             
             self.captureDevice = inputDevice
             self.captureDeviceResolution = resolution
         }
+        
+        
         
         /// - Tag: DesignatePreviewLayer
         fileprivate func designatePreviewLayer(for captureSession: AVCaptureSession) {
