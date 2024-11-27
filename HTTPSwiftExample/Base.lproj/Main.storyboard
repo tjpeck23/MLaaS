@@ -20,12 +20,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter Label" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
-                                <rect key="frame" x="137" y="230" width="101" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
                                 <rect key="frame" x="104" y="165" width="166" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -42,14 +36,27 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
-                                <rect key="frame" x="134" y="385" width="104" height="35"/>
+                                <rect key="frame" x="122" y="385" width="128" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Send Data"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Upload Photo"/>
                                 <connections>
                                     <action selector="sendDataButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="6wB-nA-UUh"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Prediction: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ewy-qa-Ew7">
+                                <rect key="frame" x="104" y="308" width="166" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Leave blank for prediction or add label for data entry" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
+                                <rect key="frame" x="1" y="214" width="372" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -57,11 +64,12 @@
                     <connections>
                         <outlet property="dataLabelOutlet" destination="yvS-fr-lM6" id="0hl-iI-1hf"/>
                         <outlet property="ipOutlet" destination="Kbs-Ho-yMp" id="hm3-rp-C10"/>
+                        <outlet property="predictLabel" destination="Ewy-qa-Ew7" id="PVf-nI-mUz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1263" y="-582"/>
+            <point key="canvasLocation" x="2400.8000000000002" y="-548.27586206896558"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -99,14 +107,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
-                                <rect key="frame" x="249" y="48" width="107" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Pick Image"/>
-                                <connections>
-                                    <action selector="pickImageButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d08-ZA-HFb"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvz-fi-tBH">
                                 <rect key="frame" x="246" y="91" width="113" height="35"/>
                                 <state key="normal" title="Button"/>
@@ -126,12 +126,20 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vy4-z2-j5L">
-                                <rect key="frame" x="191" y="158" width="184" height="35"/>
+                                <rect key="frame" x="201" y="158" width="174" height="35"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Send Labelled Image"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Prediction Interface"/>
                                 <connections>
                                     <action selector="DataButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jGk-nT-K63"/>
                                     <segue destination="K64-Ri-AXi" kind="push" identifier="ShowDataViewController" id="m5c-on-uc1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFP-hX-See">
+                                <rect key="frame" x="156" y="48" width="219" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Select Photo from Library"/>
+                                <connections>
+                                    <action selector="pickImageButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d08-ZA-HFb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -194,7 +202,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jg7-X5-PyN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1968.8" y="264.91754122938534"/>
+            <point key="canvasLocation" x="2401" y="265"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="eab-NM-8Bt">

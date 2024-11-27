@@ -16,6 +16,10 @@ protocol ClientDelegate {
     func receivedPrediction(_ prediction:[String:Any])
 }
 
+protocol PredictionDelegate: AnyObject {
+    func updateLabel(with text: String)
+}
+
 enum RequestEnum:String {
     case get = "GET"
     case put = "PUT"
@@ -28,6 +32,7 @@ enum RequestEnum:String {
 
 class MlaasModel: NSObject, URLSessionDelegate {
     
+    weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
     var server_ip:String = "192.168.1.144"
     private var  dsid:Int = 3
@@ -332,6 +337,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     func receivedPrediction(_ prediction: [String:Any]){
         if let labelResponse = prediction["prediction"] as? String{
             print(labelResponse)
+            predDelegate?.updateLabel(with: labelResponse)
         }
         else{
             print("Received prediction data without label.")
