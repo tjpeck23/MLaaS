@@ -11,11 +11,12 @@ import UIKit
 import AVKit
 import Vision
 
-class FaceScanViewController: UIViewController  {
+class FaceScanViewController: UIViewController, AVCapturePhotoCaptureDelegate  {
     
     // Main view for showing camera content.
     @IBOutlet weak var previewView: UIView?
     
+    @IBOutlet weak var capturePhotoButton: UIButton!
     //@IBOutlet weak var gazeSlider: UISlider!
     // AVCapture variables to hold sequence data
     var session: AVCaptureSession?
@@ -66,6 +67,40 @@ class FaceScanViewController: UIViewController  {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    @IBAction func takePhoto(_ sender: Any) {
+        /*let myShotOrientation = UIDevice.current.orientation.rawValue
+        if let photoOutputConnection = self.photoDataOutput!.connection(with: .video) {
+                photoOutputConnection.videoOrientation = myShotOrientation
+            }*/
+
+        let photoSettings = AVCapturePhotoSettings()
+        //photoSettings.isHighResolutionPhotoEnabled = true
+        photoSettings.flashMode = .auto
+        self.photoDataOutput?.capturePhoto(with: photoSettings, delegate: self)
+
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        session?.stopRunning()
+        
+        guard let data = photo.fileDataRepresentation() else { return }
+        let image = UIImage(data: data)
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        imageView.frame = view.bounds
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.view.addSubview(imageView)
+            // Save to the Gallery
+            UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
+            
+            // Recognize text
+            //self?.recognizeImage(image!)
+        }
     }
     
     // Ensure that the interface stays locked in Portrait.
@@ -450,6 +485,8 @@ class FaceScanViewController: UIViewController  {
         func exifOrientationForCurrentDeviceOrientation() -> CGImagePropertyOrientation {
             return exifOrientationForDeviceOrientation(UIDevice.current.orientation)
         }
+        
+
     }
     
     
@@ -462,7 +499,7 @@ class FaceScanViewController: UIViewController  {
             let captureSession = AVCaptureSession()
             do {
                 let inputDevice = try self.configureFrontCamera(for: captureSession)
-                self.configureVideoDataOutput(for: inputDevice.device, resolution: inputDevice.resolution, captureSession: captureSession)
+                self.configurePhotoDataOutput(for: inputDevice.device, resolution: inputDevice.resolution, captureSession: captureSession)
                 self.designatePreviewLayer(for: captureSession)
                 return captureSession
             } catch let executionError as NSError {
@@ -526,30 +563,24 @@ class FaceScanViewController: UIViewController  {
         }
         
         /// - Tag: CreateSerialDispatchQueue
-        fileprivate func configureVideoDataOutput(for inputDevice: AVCaptureDevice, resolution: CGSize, captureSession: AVCaptureSession) {
+        fileprivate func configurePhotoDataOutput(for inputDevice: AVCaptureDevice, resolution: CGSize, captureSession: AVCaptureSession) {
             
-            let videoDataOutput = AVCapturePhotoOutput()
-            //videoDataOutput.alwaysDiscardsLateVideoFrames = true
+            let photoDataOutput = AVCapturePhotoOutput()
+
             
-            // Create a serial dispatch queue used for the sample buffer delegate as well as when a still image is captured.
-            // A serial dispatch queue must be used to guarantee that video frames will be delivered in order.
-            //let videoDataOutputQueue = DispatchQueue(label: "com.example.apple-samplecode.VisionFaceTrack")
-            //videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
-            
-            if captureSession.canAddOutput(videoDataOutput) {
-                captureSession.addOutput(videoDataOutput)
+            if captureSession.canAddOutput(photoDataOutput) {
+                captureSession.addOutput(photoDataOutput)
             }
             
-            videoDataOutput.connection(with: .video)?.isEnabled = true
+            photoDataOutput.connection(with: .video)?.isEnabled = true
             
-            if let captureConnection = videoDataOutput.connection(with: AVMediaType.video) {
+            if let captureConnection = photoDataOutput.connection(with: AVMediaType.video) {
                 if captureConnection.isCameraIntrinsicMatrixDeliverySupported {
                     captureConnection.isCameraIntrinsicMatrixDeliveryEnabled = true
                 }
             }
             
-            self.photoDataOutput = videoDataOutput
-            //self.videoDataOutputQueue = videoDataOutputQueue
+            self.photoDataOutput = photoDataOutput
             
             self.captureDevice = inputDevice
             self.captureDeviceResolution = resolution
@@ -586,7 +617,7 @@ class FaceScanViewController: UIViewController  {
             }
         }
     }
-    
+
     
 
     

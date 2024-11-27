@@ -187,16 +187,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1u-aO-WjO">
-                                <rect key="frame" x="67" y="91" width="240" height="389"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1u-aO-WjO">
+                                <rect key="frame" x="0.0" y="0.0" width="462" height="812"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="393" id="7rN-SX-pDJ"/>
+                                    <constraint firstAttribute="height" constant="852" id="kB7-rz-xp0"/>
+                                </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iml-u0-I0f">
+                                <rect key="frame" x="145" y="612" width="85" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Capture"/>
+                                <connections>
+                                    <action selector="takePhoto:" destination="ieQ-7B-JY9" eventType="touchUpInside" id="DWQ-t0-7gM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="iTJ-1A-lWj"/>
                     <connections>
+                        <outlet property="capturePhotoButton" destination="iml-u0-I0f" id="6Te-mb-GXr"/>
                         <outlet property="previewView" destination="y1u-aO-WjO" id="4yE-OC-RIb"/>
                     </connections>
                 </viewController>
