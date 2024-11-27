@@ -41,7 +41,7 @@ class DataViewController: UIViewController {
         
     }
     @IBAction func trainButton(_ sender: UIButton) {
-        mlaasmodel.
+        mlaasmodel.trainModel()
     }
     
     @objc func dismissKeyboard() {

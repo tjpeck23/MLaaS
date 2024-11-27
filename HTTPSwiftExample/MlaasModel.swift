@@ -82,14 +82,37 @@ class MlaasModel: NSObject, URLSessionDelegate {
         postTask.resume()
     }
     func trainModel() {
-        let baseURL = "http://\(server_ip):8000/train_model_turi/\(self.dsid)"
+        let baseURL = "http://\(server_ip):8000/train_model_turi/\(dsid)"
         let postUrl = URL(string: "\(baseURL)")
         
         var request = URLRequest(url: postUrl!)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    print("Error in GET request: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    print("Response status code: \(httpResponse.statusCode)")
+                }
+                
+                if let data = data {
+                    do {
+                        // Decode the JSON response
+                        if let jsonResponse = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                            print("Training Response: \(jsonResponse)")
+                        } else {
+                            print("Unable to decode training response")
+                        }
+                    } catch {
+                        print("Error decoding JSON: \(error.localizedDescription)")
+                    }
+                }
+            }
+            task.resume()
     }
     
     func sendData(_ array:[Double]){
