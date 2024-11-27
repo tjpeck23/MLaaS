@@ -29,7 +29,7 @@ enum RequestEnum:String {
 class MlaasModel: NSObject, URLSessionDelegate {
     
     private let operationQueue = OperationQueue()
-    var server_ip:String = "127.0.0.1"
+    var server_ip:String = "192.168.1.144"
     private var  dsid:Int = 3
     var delegate:ClientDelegate?
     
@@ -72,10 +72,11 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 }
             }
             else {
-                let jsonDictionary = self.convertDataToDictionary(with: data)
+                /*let jsonDictionary = self.convertDataToDictionary(with: data)
                 
                 print(jsonDictionary["feature"]!)
-                print(jsonDictionary["label"]!)
+                print(jsonDictionary["label"]!)*/
+                
             }
         })
         postTask.resume()
@@ -246,7 +247,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         
         CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
-        
         return doubleArray
     }
 
@@ -301,12 +301,10 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 return
             }
         
-        
-        let dataToSend = [
-            "features": dataVector,
-            "label": label
-        ] as [String : Any]
-        
+        if dataVector.isEmpty {
+            print("Error: Data vector is empty")
+            return
+        }
         
         if !label.isEmpty {
                 // If label exists, send data with label
