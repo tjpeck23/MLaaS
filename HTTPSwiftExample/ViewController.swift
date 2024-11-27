@@ -242,14 +242,7 @@ extension ViewController {
         // delegate function completion handler
     }
     
-    func receivedPrediction(_ prediction: [String:Any]){
-        if let labelResponse = prediction["prediction"] as? String{
-            print(labelResponse)
-        }
-        else{
-            print("Received prediction data without label.")
-        }
-    }
+    
 }
 
 

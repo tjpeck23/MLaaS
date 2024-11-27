@@ -20,46 +20,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter Label" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
-                                <rect key="frame" x="137" y="221" width="101" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter Label" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
+                                <rect key="frame" x="137" y="230" width="101" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
-                                <rect key="frame" x="104" y="102" width="166" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
+                                <rect key="frame" x="104" y="165" width="166" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
-                                <rect key="frame" x="136" y="316" width="104" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-7F-1zm">
+                                <rect key="frame" x="114" y="461" width="146" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Train Turi Model"/>
+                                <connections>
+                                    <action selector="trainButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="TgD-sk-dr1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
+                                <rect key="frame" x="134" y="385" width="104" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Send Data"/>
                                 <connections>
                                     <action selector="sendDataButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="6wB-nA-UUh"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-7F-1zm">
-                                <rect key="frame" x="132" y="477" width="113" height="34.5"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Train Model"/>
-                                <connections>
-                                    <action selector="trainButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="TgD-sk-dr1"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="yvS-fr-lM6" firstAttribute="top" secondItem="Kbs-Ho-yMp" secondAttribute="bottom" constant="38" id="5QB-kX-ZXN"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="7w5-BR-Wra"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="E0J-Vu-Gfc"/>
-                            <constraint firstItem="7mH-7F-1zm" firstAttribute="top" secondItem="K3e-6I-YmT" secondAttribute="bottom" constant="102" id="HUB-C1-nTB"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="OGS-lG-vTh"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="YLR-qH-T5O"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="firstBaseline" secondItem="yvS-fr-lM6" secondAttribute="baseline" constant="22" symbolType="layoutAnchor" id="c27-Zk-d6j"/>
-                            <constraint firstItem="yvS-fr-lM6" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="f7j-Yj-mpR"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="leading" secondItem="TKu-f7-BkB" secondAttribute="leading" constant="150" id="oIF-eZ-PWN"/>
-                            <constraint firstItem="7mH-7F-1zm" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="v7N-wk-AiB"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ie3-Ff-CxR"/>
                     <connections>
@@ -69,7 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1264.8" y="-422.33883058470769"/>
+            <point key="canvasLocation" x="1263" y="-582"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">

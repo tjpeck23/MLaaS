@@ -116,6 +116,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     }
     
     func sendData(_ array:[Double]){
+        print("Sending data to server for prediction")
         let baseURL = "http://\(server_ip):8000/predict_turi/"
         let postUrl = URL(string: "\(baseURL)")
         
@@ -124,7 +125,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
         // utility method to use from below
         let requestBody:Data = try! JSONSerialization.data(withJSONObject: ["feature":array,
-            "dsid":self.dsid])
+            "dsid":dsid])
         
         // The Type of the request is given here
         request.httpMethod = "POST"
@@ -141,11 +142,12 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 }
             }
             else{
-                
-                if let delegate = self.delegate {
-                    let jsonDictionary = self.convertDataToDictionary(with: data)
-                    delegate.receivedPrediction(jsonDictionary as! [String : Any])
+                if let jsonDictionary = self.convertDataToDictionary(with: data) as? [String: Any] {
+                    self.receivedPrediction(jsonDictionary)
+                } else {
+                    print("Error: Could not convert data to dictionary")
                 }
+
             }
         })
         
@@ -327,8 +329,24 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
     }
     
+    func receivedPrediction(_ prediction: [String:Any]){
+        if let labelResponse = prediction["prediction"] as? String{
+            print(labelResponse)
+        }
+        else{
+            print("Received prediction data without label.")
+        }
+    }
+    
     // adding convert data to dictionary
     func convertDataToDictionary(with data:Data?)->NSDictionary {
+        
+        if let data = data {
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Received raw data: \(jsonString)")  // Logs the raw JSON data
+            }
+        }
+        
         do {
             let jsonDictionary: NSDictionary = try
             JSONSerialization.jsonObject(with: data!, options: JSONSerialization
@@ -337,6 +355,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 NSDictionary
             return jsonDictionary
         } catch {
+            
             print("json error: \(error.localizedDescription)")
             return NSDictionary()
         }

@@ -301,7 +301,7 @@ async def train_model_turi(dsid: int):
     model = tc.classifier.create(data,target="target",verbose=0)# training
     
     # save model for use later, if desired
-    model.save("../models/turi_model_dsid%d"%(dsid))
+    model.save("/Users/travisjpeck/Desktop/models/turi_model_dsid%d"%(dsid))
 
     # save this for use later 
     app.clf[dsid] = model #Store the model in app.clf with DSID as the key
@@ -313,18 +313,20 @@ async def train_model_turi(dsid: int):
     "/predict_turi/",
     response_description="Predict Label from Datapoint",
 )
+
 async def predict_datapoint_turi(datapoint: FeatureDataPoint = Body(...)):
     """
     Post a feature set and get the label back
 
     """
+    app.clf = {}
 
     # place inside an SFrame (that has one row)
     data = tc.SFrame(data={"sequence":np.array(datapoint.feature).reshape((1,-1))})
 
     if(app.clf == {}):
         print("Loading Turi Model From file")
-        app.clf = tc.load_model("../models/turi_model_dsid%d"%(datapoint.dsid))
+        app.clf[datapoint.dsid] = tc.load_model("/Users/travisjpeck/Desktop/models/turi_model_dsid%d"%(datapoint.dsid))
 
         # TODO: what happens if the user asks for a model that was never trained?
         #       or if the user asks for a dsid without any data? 
@@ -332,7 +334,7 @@ async def predict_datapoint_turi(datapoint: FeatureDataPoint = Body(...)):
 
         try:
             print(f"Loading Turi Model for DSID {datapoint.dsid} from file")
-            model_path = f"../models/turi_model_dsid{datapoint.dsid}"
+            model_path = f"/Users/travisjpeck/Desktop/models/turi_model_dsid{datapoint.dsid}"
             app.clf[datapoint.dsid] = tc.load_model(model_path)
         except FileNotFoundError:
             # failure for if file doesnt exisit
