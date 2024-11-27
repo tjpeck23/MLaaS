@@ -16,7 +16,7 @@ class FaceScanViewController: UIViewController  {
     // Main view for showing camera content.
     @IBOutlet weak var previewView: UIView?
     
-    @IBOutlet weak var gazeSlider: UISlider!
+    //@IBOutlet weak var gazeSlider: UISlider!
     // AVCapture variables to hold sequence data
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -362,7 +362,7 @@ class FaceScanViewController: UIViewController  {
                     let maxY = leftEyePoints.map { $0.y}.max() ?? 0.0
                     
 
-                    var currentDiff:CGFloat = maxY-minY
+                    let currentDiff:CGFloat = maxY-minY
 
                     
                     // Flipped Module part 2.1
@@ -402,9 +402,9 @@ class FaceScanViewController: UIViewController  {
         DispatchQueue.main.async {
             // draw the landmarks using core animation layers
             self.drawFaceObservations(results)
-            if !self.isBlinking{
+            /*if !self.isBlinking{
                 self.gazeSlider.setValue(Float(self.detectGazeDirection(in: results.first!)!), animated: true)
-            }
+            }*/
         }
         }
         
@@ -419,7 +419,8 @@ class FaceScanViewController: UIViewController  {
         
         fileprivate func presentErrorAlert(withTitle title: String = "Unexpected Failure", message: String) {
             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            self.present(alertController, animated: true)
+            //self.present(alertController, animated: true)
+            self.view.window?.rootViewController?.present(alertController, animated: true, completion: nil)
         }
         
         fileprivate func presentError(_ error: NSError) {
@@ -506,18 +507,19 @@ class FaceScanViewController: UIViewController  {
         
         fileprivate func configureFrontCamera(for captureSession: AVCaptureSession) throws -> (device: AVCaptureDevice, resolution: CGSize) {
             let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front)
-            
+            print("got here1")
             if let device = deviceDiscoverySession.devices.first {
                 if let deviceInput = try? AVCaptureDeviceInput(device: device) {
                     if captureSession.canAddInput(deviceInput) {
                         captureSession.addInput(deviceInput)
+                        print("got here2")
                     }
                     
                     if let highestResolution = self.highestResolution420Format(for: device) {
                         try device.lockForConfiguration()
                         device.activeFormat = highestResolution.format
                         device.unlockForConfiguration()
-                        
+                        print("got here3")
                         return (device, highestResolution.resolution)
                     }
                 }
@@ -750,6 +752,7 @@ class FaceScanViewController: UIViewController  {
         
         /// - Tag: DrawPaths
         fileprivate func drawFaceObservations(_ faceObservations: [VNFaceObservation]) {
+            print("got here")
             guard let faceRectangleShapeLayer = self.detectedFaceRectangleShapeLayer,
                   let faceLandmarksShapeLayer = self.detectedFaceLandmarksShapeLayer
             else {

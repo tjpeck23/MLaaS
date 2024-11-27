@@ -121,7 +121,7 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Check Face"/>
                                 <connections>
                                     <action selector="checkIfFaceMatchesPrediction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="M3r-mM-bdI"/>
-                                    <segue destination="ieQ-7B-JY9" kind="push" identifier="FaceScanViewControllerSegue" id="m5E-Xv-MfX"/>
+                                    <segue destination="ieQ-7B-JY9" kind="push" identifier="ShowFaceScanViewController" id="m5E-Xv-MfX"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q83-th-e1u">
@@ -186,9 +186,19 @@
                     <view key="view" contentMode="scaleToFill" id="QgS-ej-7x1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1u-aO-WjO">
+                                <rect key="frame" x="67" y="91" width="240" height="389"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="iTJ-1A-lWj"/>
+                    <connections>
+                        <outlet property="previewView" destination="y1u-aO-WjO" id="4yE-OC-RIb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jg7-X5-PyN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
