@@ -61,7 +61,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
                                                              "dsid": self.dsid])
         
         request.httpMethod = "POST"
-        request.setValue("applicataion/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
         
         let postTask : URLSessionDataTask = self.session.dataTask(with: request,
@@ -72,10 +72,10 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 }
             }
             else {
-                /*let jsonDictionary = self.convertDataToDictionary(with: data)
+                let jsonDictionary = self.convertDataToDictionary(with: data)
                 
                 print(jsonDictionary["feature"]!)
-                print(jsonDictionary["label"]!)*/
+                print(jsonDictionary["label"]!)
                 
             }
         })
@@ -214,6 +214,10 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
         // Unlock the base address after rendering
         CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
+        
+        /*if let pixelArray = pixelBufferToDoubleArray(pixelBuffer: buffer) {
+                print("Pixel array: \(pixelArray)")  // This will print the array
+            }*/
 
         return buffer
     }
