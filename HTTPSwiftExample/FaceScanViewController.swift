@@ -16,7 +16,7 @@ class FaceScanViewController: UIViewController  {
     // Main view for showing camera content.
     @IBOutlet weak var previewView: UIView?
     
-    @IBOutlet weak var gazeSlider: UISlider!
+    //@IBOutlet weak var gazeSlider: UISlider!
     // AVCapture variables to hold sequence data
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -402,9 +402,9 @@ class FaceScanViewController: UIViewController  {
         DispatchQueue.main.async {
             // draw the landmarks using core animation layers
             self.drawFaceObservations(results)
-            if !self.isBlinking{
+            /*if !self.isBlinking{
                 self.gazeSlider.setValue(Float(self.detectGazeDirection(in: results.first!)!), animated: true)
-            }
+            }*/
         }
         }
         
@@ -419,7 +419,8 @@ class FaceScanViewController: UIViewController  {
         
         fileprivate func presentErrorAlert(withTitle title: String = "Unexpected Failure", message: String) {
             let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            self.present(alertController, animated: true)
+            //self.present(alertController, animated: true)
+            self.view.window?.rootViewController?.present(alertController, animated: true, completion: nil)
         }
         
         fileprivate func presentError(_ error: NSError) {
