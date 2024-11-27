@@ -34,10 +34,10 @@ class DataViewController: UIViewController {
         
         let vector = selectedImage
         
-        let userip = ipOutlet.text ?? ""
+        //let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
-        mlaasmodel.uploadImageWithLabel(image: vector, label: label, server_ip: userip)
+        mlaasmodel.uploadImageWithLabel(image: vector, label: label, modelType: "KNN")
         
     }
     @IBAction func trainButton(_ sender: UIButton) {

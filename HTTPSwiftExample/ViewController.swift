@@ -29,8 +29,12 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     
     @IBOutlet weak var mainTextView: UITextView!
     
+    @IBOutlet weak var modelTypeSegmentedControl: UISegmentedControl! // Connect the segmented control from the storyboard for mod B
+    
     @IBOutlet weak var checkFaceButton: UIButton!
     let animation = CATransition()
+    
+    var selectedModelType: String = "KNN" // Default model type
     
     //MARK: Setup Session and Animation
     override func viewDidLoad() {
@@ -38,7 +42,7 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         // Do any additional setup after loading the view, typically from a nib.
         
         // setup URL Session
-        
+        modelTypeSegmentedControl.addTarget(self, action: #selector(modelTypeChanged(_:)), for: .valueChanged)
         
         // create reusable animation
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
@@ -57,7 +61,29 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         }
     }
 
-
+    //chatgpt helped me with this code for Mod B because I was confused and getting errors
+    @objc func modelTypeChanged(_ sender: UISegmentedControl) {
+           switch sender.selectedSegmentIndex {
+           case 0:
+               selectedModelType = "KNN"
+           case 1:
+               selectedModelType = "XGBoost"
+           default:
+               selectedModelType = "KNN" // Default fallback
+           }
+           print("Selected model type: \(selectedModelType)")
+       }
+    
+    @IBAction func uploadButtonTapped(_ sender: UIButton) {
+           guard let image = UIImage(named: "sample_image") else { return }
+           let label = "ExampleLabel" // Replace with user input if applicable
+           
+           // Pass the selected model type to uploadImageWithLabel
+           let mlModel = MlaasModel()
+        mlModel.uploadImageWithLabel(image: image, label: label, modelType: selectedModelType)
+       }
+   
+    
     @IBAction func pickImageButton(_ sender: UIButton) {
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary

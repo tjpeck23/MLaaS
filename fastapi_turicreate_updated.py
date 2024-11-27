@@ -280,7 +280,7 @@ def read_root():
     response_description="Train a machine learning model for the given dsid",
     response_model_by_alias=False,
 )
-async def train_model_turi(dsid: int):
+async def train_model_turi(dsid: int, model_type: str = "KNN"):  # Default to "KNN"
     """
     Train the machine learning model using Turi
     """
@@ -297,34 +297,43 @@ async def train_model_turi(dsid: int):
         "sequence":np.array([datapoint["feature"] for datapoint in datapoints])}
     )
         
-    # create a classifier model  
-    model = tc.classifier.create(data,target="target",verbose=0)# training
+    # Create the classifier model based on specified type 
+    #this is for module B
+    if model_type == "KNN":
+        model = tc.knn.create(data, target="target", verbose=0)
+    elif model_type == "XGBoost":
+        model = tc.xgboost.create(data, target="target", verbose=0)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported model type: {model_type}")
     
-    # save model for use later, if desired
-    model.save("../models/turi_model_dsid%d"%(dsid))
+    # Save model for later use
+    model.save(f"/Users/travisjpeck/Desktop/models/turi_model_dsid{dsid}_{model_type}")
 
-    # save this for use later 
-    app.clf[dsid] = model #Store the model in app.clf with DSID as the key
+    # Save model to app.clf for later use
+    app.clf[dsid] = model
 
-    return {"summary":f"{model}"}
+    return {"summary": f"Model trained with {model_type} for DSID {dsid}"}
+    
 
 
 @app.post(
     "/predict_turi/",
     response_description="Predict Label from Datapoint",
 )
+
 async def predict_datapoint_turi(datapoint: FeatureDataPoint = Body(...)):
     """
     Post a feature set and get the label back
 
     """
+    app.clf = {}
 
     # place inside an SFrame (that has one row)
     data = tc.SFrame(data={"sequence":np.array(datapoint.feature).reshape((1,-1))})
 
     if(app.clf == {}):
         print("Loading Turi Model From file")
-        app.clf = tc.load_model("../models/turi_model_dsid%d"%(datapoint.dsid))
+        app.clf[datapoint.dsid] = tc.load_model("/Users/travisjpeck/Desktop/models/turi_model_dsid%d"%(datapoint.dsid))
 
         # TODO: what happens if the user asks for a model that was never trained?
         #       or if the user asks for a dsid without any data? 
@@ -332,7 +341,7 @@ async def predict_datapoint_turi(datapoint: FeatureDataPoint = Body(...)):
 
         try:
             print(f"Loading Turi Model for DSID {datapoint.dsid} from file")
-            model_path = f"../models/turi_model_dsid{datapoint.dsid}"
+            model_path = f"/Users/travisjpeck/Desktop/models/turi_model_dsid{datapoint.dsid}"
             app.clf[datapoint.dsid] = tc.load_model(model_path)
         except FileNotFoundError:
             # failure for if file doesnt exisit
