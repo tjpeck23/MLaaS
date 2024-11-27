@@ -54,36 +54,31 @@ class MlaasModel: NSObject, URLSessionDelegate {
         return URLSession(configuration: sessionConfig)
     }()
     
-    func sendData(_ array:[Double], withLabel label:String) {
+    func sendData(_ array: [Double], withLabel label: String, modelType: String) {
         let baseURL = "http://\(server_ip):8000/labeled_data/"
-        let postURL = URL(string: "\(baseURL)")
+        guard let postURL = URL(string: "\(baseURL)") else { return }
         
-        var request = URLRequest(url: postURL!)
-        
-        let requestBody:Data = try! JSONSerialization.data(withJSONObject:
-                                                            ["feature": array,
-                                                             "label":"\(label)",
-                                                             "dsid": self.dsid])
+        var request = URLRequest(url: postURL)
+        let requestBody: Data = try! JSONSerialization.data(withJSONObject: [
+            "feature": array,
+            "label": label,
+            "dsid": self.dsid,
+            "modelType": modelType
+        ])
         
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
         
-        let postTask : URLSessionDataTask = self.session.dataTask(with: request,
-                                                                  completionHandler: {(data, response, error) in
-            if(error != nil) {
-                if let res = response {
-                    print("Response: \(res)")
-                }
+        let postTask: URLSessionDataTask = self.session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
             }
-            else {
-                let jsonDictionary = self.convertDataToDictionary(with: data)
-                
-                print(jsonDictionary["feature"]!)
-                print(jsonDictionary["label"]!)
-                
-            }
-        })
+            guard let data = data else { return }
+            let jsonDictionary = self.convertDataToDictionary(with: data)
+            print(jsonDictionary)
+        }
         postTask.resume()
     }
     func trainModel() {
@@ -270,7 +265,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
     
     // Function that combines our preprocessing functions and sends to server
-    func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
+    func uploadImageWithLabel(image: UIImage, label: String, server_ip: String, modelType: String) {
         
         
         guard let pixelBuffer = preprocessImage(image) else {
@@ -290,13 +285,11 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         
         if !label.isEmpty {
-                // If label exists, send data with label
-                sendData(dataVector, withLabel: label)
-            } else {
-                // If no label, send data without label
-                sendData(dataVector)
-            }
-    }
+               sendData(dataVector, withLabel: label, modelType: modelType)
+           } else {
+               sendData(dataVector, modelType: modelType)
+           }
+       }
     
     
     //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
