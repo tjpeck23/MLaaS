@@ -8,12 +8,13 @@
 
 import UIKit
 
-class DataViewController: UIViewController {
+class DataViewController: UIViewController, PredictionDelegate {
     
     
     @IBOutlet weak var ipOutlet: UITextField!
     @IBOutlet weak var dataLabelOutlet: UITextField!
-
+    @IBOutlet weak var predictLabel: UILabel!
+    
     let mlaasmodel = MlaasModel()
     var featureImage: UIImage?
     
@@ -21,7 +22,7 @@ class DataViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            self.view.addGestureRecognizer(tapGesture)
+        self.view.addGestureRecognizer(tapGesture)
     }
     
     @IBAction func sendDataButton(_ sender: Any) {
@@ -39,16 +40,25 @@ class DataViewController: UIViewController {
         
         mlaasmodel.uploadImageWithLabel(image: vector, label: label, modelType: "KNN")
         
+        
     }
     @IBAction func trainButton(_ sender: UIButton) {
         mlaasmodel.trainModel()
     }
+    
     
     @objc func dismissKeyboard() {
         // Resign first responder on the text fields to dismiss the keyboard
         ipOutlet.resignFirstResponder()
         dataLabelOutlet.resignFirstResponder()
     }
+    
+    func updateLabel(with text: String) {
+        DispatchQueue.main.async {
+            self.predictLabel.text = "Prediction: \(text)"
+        }
+    }
+    
     
     /*
     // MARK: - Navigation
