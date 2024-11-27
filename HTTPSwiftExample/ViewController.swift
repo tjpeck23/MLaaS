@@ -15,7 +15,7 @@
 //    ifconfig |grep inet
 // to see what your public facing IP address is, the ip address can be used here
 //let SERVER_URL = "http://erics-macbook-pro.local:8000" // change this for your server name!!!
-let SERVER_URL = "http://127.0.0.1:8000" // change this for your server name!!!
+let SERVER_URL = "http://192.168.1.144:8000" // change this for your server name!!!
 
 import UIKit
 
@@ -242,7 +242,7 @@ extension ViewController {
         // delegate function completion handler
     }
     
-    func receivedPrediction(_ prediction:[String:Any]){
+    func receivedPrediction(_ prediction: [String:Any]){
         if let labelResponse = prediction["prediction"] as? String{
             print(labelResponse)
         }

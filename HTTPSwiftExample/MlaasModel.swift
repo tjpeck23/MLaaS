@@ -29,7 +29,7 @@ enum RequestEnum:String {
 class MlaasModel: NSObject, URLSessionDelegate {
     
     private let operationQueue = OperationQueue()
-    var server_ip:String = "127.0.0.1"
+    var server_ip:String = "192.168.1.144"
     private var  dsid:Int = 3
     var delegate:ClientDelegate?
     
@@ -61,7 +61,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
                                                              "dsid": self.dsid])
         
         request.httpMethod = "POST"
-        request.setValue("applicataion/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
         
         let postTask : URLSessionDataTask = self.session.dataTask(with: request,
@@ -76,9 +76,20 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 
                 print(jsonDictionary["feature"]!)
                 print(jsonDictionary["label"]!)
+                
             }
         })
         postTask.resume()
+    }
+    func trainModel() {
+        let baseURL = "http://\(server_ip):8000/train_model_turi/\(self.dsid)"
+        let postUrl = URL(string: "\(baseURL)")
+        
+        var request = URLRequest(url: postUrl!)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
     }
     
     func sendData(_ array:[Double]){
@@ -149,32 +160,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
         
     }
     
-    // Converts image to pixel buffer
-    /*func preprocessImage(_ image: UIImage, targetSize: CGSize=CGSize(width:224, height:224)) -> CVPixelBuffer? {
-        UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
-        image.draw(in: CGRect(origin: .zero, size: targetSize))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        guard let cgImage = resizedImage?.cgImage else {
-            print("Could not convert image to cgimage")
-            return nil}
-        
-        let ciImage = CIImage(cgImage: cgImage)
-        let context = CIContext(options: nil)
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        var pixelBuffer: CVPixelBuffer?
-        
-        CVPixelBufferCreate(kCFAllocatorDefault, Int(targetSize.width), Int(targetSize.height), kCVPixelFormatType_32ARGB, nil, &pixelBuffer)
-        
-        guard let buffer = pixelBuffer else {
-            print("Could not convert image to pixel buffer")
-            return nil}
-        CVPixelBufferLockBaseAddress(buffer, .readOnly)
-        context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y:0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
-        CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
-        return buffer
-    }*/
     func preprocessImage(_ image: UIImage, targetSize: CGSize = CGSize(width: 224, height: 224)) -> CVPixelBuffer? {
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         image.draw(in: CGRect(origin: .zero, size: targetSize))
@@ -213,6 +198,10 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
         // Unlock the base address after rendering
         CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
+        
+        /*if let pixelArray = pixelBufferToDoubleArray(pixelBuffer: buffer) {
+                print("Pixel array: \(pixelArray)")  // This will print the array
+            }*/
 
         return buffer
     }
@@ -246,45 +235,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         
         CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
-        
         return doubleArray
     }
 
-
-    
-    
-    // Extracing feature vectors with CoreML MobileNetV2
-    /* func extractFeatureVector(from image: UIImage) -> [Double]? {
-        guard let pixelBuffer = preprocessImage(image) else {
-            print("Error: could not extract features")
-            return nil}
-        
-        guard let featureModel = try? MobileNetV2(configuration: MLModelConfiguration()) else{
-            print("Failed to load MobileNetV2 model")
-            return nil
-        }
-        
-        
-        do {
-            let prediction = try featureModel.prediction(image: pixelBuffer)
-            print("Model Description: \(featureModel.model.modelDescription)")
-
-
-            // This is where the error is happening
-            if let featureArray = prediction.featureValue(for: "feature")?.multiArrayValue {
-                print(featureArray.toDoubleArray())
-                return featureArray.toDoubleArray()
-            } else {
-                print("Could not get feature vector from model")
-                return nil
-            }
-        } catch {
-            print("Error during feature extraction: \(error)")
-            return nil
-        }
-        
-    }
-    */
     
     // Function that combines our preprocessing functions and sends to server
     func uploadImageWithLabel(image: UIImage, label: String, server_ip: String) {
@@ -301,12 +254,10 @@ class MlaasModel: NSObject, URLSessionDelegate {
                 return
             }
         
-        
-        let dataToSend = [
-            "features": dataVector,
-            "label": label
-        ] as [String : Any]
-        
+        if dataVector.isEmpty {
+            print("Error: Data vector is empty")
+            return
+        }
         
         if !label.isEmpty {
                 // If label exists, send data with label
