@@ -32,13 +32,16 @@ class DataViewController: UIViewController {
             return
         }
         
-        var vector = selectedImage
+        let vector = selectedImage
         
         let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
         mlaasmodel.uploadImageWithLabel(image: vector, label: label, server_ip: userip)
         
+    }
+    @IBAction func trainButton(_ sender: UIButton) {
+        mlaasmodel.
     }
     
     @objc func dismissKeyboard() {

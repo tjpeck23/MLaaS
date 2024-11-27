@@ -362,7 +362,7 @@ class FaceScanViewController: UIViewController  {
                     let maxY = leftEyePoints.map { $0.y}.max() ?? 0.0
                     
 
-                    var currentDiff:CGFloat = maxY-minY
+                    let currentDiff:CGFloat = maxY-minY
 
                     
                     // Flipped Module part 2.1
@@ -507,18 +507,19 @@ class FaceScanViewController: UIViewController  {
         
         fileprivate func configureFrontCamera(for captureSession: AVCaptureSession) throws -> (device: AVCaptureDevice, resolution: CGSize) {
             let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front)
-            
+            print("got here1")
             if let device = deviceDiscoverySession.devices.first {
                 if let deviceInput = try? AVCaptureDeviceInput(device: device) {
                     if captureSession.canAddInput(deviceInput) {
                         captureSession.addInput(deviceInput)
+                        print("got here2")
                     }
                     
                     if let highestResolution = self.highestResolution420Format(for: device) {
                         try device.lockForConfiguration()
                         device.activeFormat = highestResolution.format
                         device.unlockForConfiguration()
-                        
+                        print("got here3")
                         return (device, highestResolution.resolution)
                     }
                 }
@@ -751,6 +752,7 @@ class FaceScanViewController: UIViewController  {
         
         /// - Tag: DrawPaths
         fileprivate func drawFaceObservations(_ faceObservations: [VNFaceObservation]) {
+            print("got here")
             guard let faceRectangleShapeLayer = self.detectedFaceRectangleShapeLayer,
                   let faceLandmarksShapeLayer = self.detectedFaceLandmarksShapeLayer
             else {
