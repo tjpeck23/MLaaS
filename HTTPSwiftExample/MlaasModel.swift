@@ -287,7 +287,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         if !label.isEmpty {
                sendData(dataVector, withLabel: label, modelType: modelType)
            } else {
-               sendData(dataVector, modelType: modelType)
+               sendData(dataVector)
            }
        }
     

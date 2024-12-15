@@ -55,7 +55,19 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            print("Pixel buffer not available")
+            return
+        }
+        
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let uiImage = UIImage(ciImage: ciImage)
+        
         print("Frame captured")
+        
+        DispatchQueue.main.async {
+            self.mlaasmodel.uploadImageWithLabel(image: uiImage, label: "", modelType: "KNN")
+        }
     }
     
     @IBAction func sendDataButton(_ sender: Any) {
@@ -88,7 +100,8 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     
     func updateLabel(with text: String) {
         DispatchQueue.main.async {
-            self.predictLabel.text = "Prediction: \(text)"
+            self.predictLabel.text = text
+            print(self.predictLabel.text)
         }
     }
     
