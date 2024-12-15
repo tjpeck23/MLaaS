@@ -81,6 +81,60 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         postTask.resume()
     }
+    func postSecret(_ array: [Double], trustedParties: [String]) {
+        let baseURL = "http://\(server_ip):8000/secret_data/"
+        guard let postURL = URL(string: "\(baseURL)") else { return }
+        
+        var request = URLRequest(url: postURL)
+        let requestBody: Data = try! JSONSerialization.data(withJSONObject: [
+            "feature": array,
+            "trustedParties": trustedParties,
+            "dsid": self.dsid,
+        ])
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+        
+        let postTask: URLSessionDataTask = self.session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            guard let data = data else { return }
+            let jsonDictionary = self.convertDataToDictionary(with: data)
+            print(jsonDictionary)
+        }
+        postTask.resume()
+    }
+    
+    func getSecret(_ array: [Double]/*, trustedParties: [String]*/) {
+        let baseURL = "http://\(server_ip):8000/secret_data/{dsid}"
+        guard let postURL = URL(string: "\(baseURL)") else { return }
+        
+        var request = URLRequest(url: postURL)
+        let requestBody: Data = try! JSONSerialization.data(withJSONObject: [
+            "feature": array,
+            //"trustedParties": trustedParties,
+            "dsid": self.dsid,
+        ])
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+        
+        let getTask: URLSessionDataTask = self.session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            guard let data = data else { return }
+            let jsonDictionary = self.convertDataToDictionary(with: data)
+            print(jsonDictionary)
+        }
+        getTask.resume()
+    }
+    
     func trainModel() {
         let baseURL = "http://\(server_ip):8000/train_model_turi/\(dsid)"
         let postUrl = URL(string: "\(baseURL)")

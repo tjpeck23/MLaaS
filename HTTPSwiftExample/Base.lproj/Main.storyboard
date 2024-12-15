@@ -46,6 +46,14 @@
                                     <action selector="trainButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="TgD-sk-dr1"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGC-Tp-ycJ">
+                                <rect key="frame" x="127" y="405" width="121" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Authenticate"/>
+                                <connections>
+                                    <segue destination="reU-zH-WUY" kind="push" id="dBn-D0-wMy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
@@ -53,11 +61,14 @@
                             <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="7w5-BR-Wra"/>
                             <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="E0J-Vu-Gfc"/>
                             <constraint firstItem="7mH-7F-1zm" firstAttribute="top" secondItem="K3e-6I-YmT" secondAttribute="bottom" constant="102" id="HUB-C1-nTB"/>
+                            <constraint firstItem="aGC-Tp-ycJ" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="ODw-Wh-zsU"/>
                             <constraint firstItem="K3e-6I-YmT" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="OGS-lG-vTh"/>
                             <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="YLR-qH-T5O"/>
+                            <constraint firstItem="aGC-Tp-ycJ" firstAttribute="top" secondItem="K3e-6I-YmT" secondAttribute="bottom" constant="54" id="ZXS-SD-0zG"/>
                             <constraint firstItem="K3e-6I-YmT" firstAttribute="firstBaseline" secondItem="yvS-fr-lM6" secondAttribute="baseline" constant="22" symbolType="layoutAnchor" id="c27-Zk-d6j"/>
                             <constraint firstItem="yvS-fr-lM6" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="f7j-Yj-mpR"/>
                             <constraint firstItem="K3e-6I-YmT" firstAttribute="leading" secondItem="TKu-f7-BkB" secondAttribute="leading" constant="150" id="oIF-eZ-PWN"/>
+                            <constraint firstItem="7mH-7F-1zm" firstAttribute="top" secondItem="aGC-Tp-ycJ" secondAttribute="bottom" constant="37" id="tkG-HD-chQ"/>
                             <constraint firstItem="7mH-7F-1zm" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="v7N-wk-AiB"/>
                         </constraints>
                     </view>
@@ -69,7 +80,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1264.8" y="-422.33883058470769"/>
+            <point key="canvasLocation" x="1246" y="-563"/>
+        </scene>
+        <!--Auth View Controller-->
+        <scene sceneID="Jmk-mQ-Cmf">
+            <objects>
+                <viewController id="reU-zH-WUY" customClass="AuthViewController" customModule="HTTPSwiftExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="D7H-Fw-aCI"/>
+                        <viewControllerLayoutGuide type="bottom" id="LPv-5Q-fqF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="D2E-Rl-Edh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="B9T-7M-TzE"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SQj-mV-SUb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2170" y="-552"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -150,6 +180,18 @@
                                     <segment title="XGBoost"/>
                                 </segments>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XOb-Fv-2LQ">
+                                <rect key="frame" x="236" y="203" width="133" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Upload Secret"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rdp-5C-0xV">
+                                <rect key="frame" x="261" y="246" width="115" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="View Secret"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>

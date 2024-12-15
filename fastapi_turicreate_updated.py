@@ -175,6 +175,73 @@ class FeatureDataPoint(BaseModel):
     )
 
 
+#===========================================
+#   Class for Secret Documents
+#-------------------------------------------
+
+class SecretDataPoint(BaseModel):
+    """
+    Container for a single labeled data point.
+    """
+
+    # This will be aliased to `_id` when sent to MongoDB,
+    # but provided as `id` in the API requests and responses.
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+    feature: List[float] = Field(...) # feature data as array
+    dsid: int = Field(..., le=50) # dataset id, for tracking different sets
+    trustedParties: List[string]
+    )
+    
+class SecretDataPointCollection(BaseModel):
+    """
+    A container holding a list of instances.
+
+    This exists because providing a top-level array in a JSON response can be a [vulnerability](https://haacked.com/archive/2009/06/25/json-hijacking.aspx/)
+    """
+
+    datapoints: List[SecretDataPoint]
+    
+@app.post(
+    "/secret_data/",
+    response_description="Add new secret datapoint",
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_datapoint(datapoint: SecretDataPoint = Body(...)):
+    """
+    Insert a new data point. Let user know the range of values inserted
+
+    A unique `id` will be created and provided in the response.
+    """
+    
+    # insert this datapoint into the database
+    new_label = await app.collection.insert_one(
+        datapoint.model_dump(by_alias=True, exclude=["id"])
+    )
+
+    # send back info about the record
+    created_label = await app.collection.find_one(
+        {"_id": new_label.inserted_id}
+    )
+    # also min/max of array, rather than the entire to array to save some bandwidth
+    # the datapoint variable is a pydantic model, so we can access with properties
+    # but the output of mongo is a dictionary, so we need to subscript the entry
+    created_label["feature"] = [min(datapoint.feature), max(datapoint.feature)]
+
+    return created_label
+
+@app.get(
+    "/secret_data/{dsid}",
+    response_description="List all labeled data in a given dsid",
+    response_model=SecretDataPointCollection,
+)
+async def list_datapoints(dsid: int):
+    """
+    List all of the data for a given dsid in the database.
+
+    The response is unpaginated and limited to 1000 results.
+    """
+    return LabeledDataPointCollection(datapoints=await app.collection.find({"dsid": dsid}).to_list(1000))
+
 
 #===========================================
 #   FastAPI methods, for interacting with db 
