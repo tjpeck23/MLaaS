@@ -34,7 +34,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
-    var server_ip:String = "192.168.1.144"
+    var server_ip:String = "192.168.1.220"
     private var  dsid:Int = 3
     var delegate:ClientDelegate?
     
@@ -144,6 +144,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
             else{
                 if let jsonDictionary = self.convertDataToDictionary(with: data) as? [String: Any] {
                     self.receivedPrediction(jsonDictionary)
+                    print(self.receivedPrediction(jsonDictionary))
                 } else {
                     print("Error: Could not convert data to dictionary")
                 }

@@ -28,6 +28,7 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
     }
+    
     func setupCamera() {
         captureSession = AVCaptureSession()
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
@@ -62,8 +63,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let uiImage = UIImage(ciImage: ciImage)
-        
-        print("Frame captured")
         
         DispatchQueue.main.async {
             self.mlaasmodel.uploadImageWithLabel(image: uiImage, label: "", modelType: "KNN")
@@ -101,7 +100,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     func updateLabel(with text: String) {
         DispatchQueue.main.async {
             self.predictLabel.text = text
-            print(self.predictLabel.text)
         }
     }
     
