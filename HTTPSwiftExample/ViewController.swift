@@ -55,15 +55,21 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowDataViewController" {  // Ensure this matches the identifier in the storyboard
+        if segue.identifier == "ShowDataViewController" {
             if let dataVC = segue.destination as? DataViewController {
-                // Pass data to DataViewController
+                // Safely cast sender as [UIImage]
                 if let selectedImages = sender as? [UIImage] {
+                    // Pass the images to the next view controller
                     dataVC.selectedImages = selectedImages
+                } else {
+                    print("Failed to cast sender as [UIImage]. sender is: \(String(describing: sender))")
                 }
             }
         }
     }
+
+
+
     
     
     @IBAction func uploadButtonTapped(_ sender: UIButton) {
@@ -77,14 +83,14 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
    
     
     @IBAction func pickImageButton(_ sender: UIButton) {
-        var config = PHPickerConfiguration()
-        config.selectionLimit = 0
-        config.filter = .images
-        
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.selectionLimit = 0 // Allow multiple selection
+        config.filter = .images // Restrict to images
+        config.preferredAssetRepresentationMode = .current // Prefer the current representation (local if available)
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
-        
         present(picker, animated: true, completion: nil)
+
     }
     
     
@@ -93,6 +99,11 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     @IBAction func DataButton(_ sender: UIButton) {
+        if selectedImages.count > 0 {
+                performSegue(withIdentifier: "ShowDataViewController", sender: selectedImages)
+            } else {
+                print("No images available.")
+            }
     }
     
     
@@ -250,26 +261,34 @@ extension ViewController {
 extension ViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
-        
-        
+
+        guard !results.isEmpty else {
+            print("No images were selected.")
+            return
+        }
+
         for result in results {
-            result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                if let image = image as? UIImage {
-                    DispatchQueue.main.async {
-                        self.selectedImages.append(image)
+            print("Registered type identifiers: \(result.itemProvider.registeredTypeIdentifiers)")
+
+            if result.itemProvider.hasItemConformingToTypeIdentifier("public.jpeg") {
+                result.itemProvider.loadDataRepresentation(forTypeIdentifier: "public.jpeg") { data, error in
+                    if let error = error {
+                        print("Error loading data representation: \(error.localizedDescription)")
+                    } else if let data = data, let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self.selectedImages.append(image)
+                            print("Image loaded successfully.")
+                            print(self.selectedImages)
+                        }
                     }
                 }
-                
-                if self.selectedImages.count == results.count {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "ShowDataViewController", sender: self.selectedImages)
-                    }
-                }
+            } else {
+                print("Item does not conform to public.jpeg.")
             }
         }
+
     }
 }
-
 
 
 
