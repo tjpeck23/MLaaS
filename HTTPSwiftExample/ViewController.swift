@@ -18,14 +18,18 @@
 let SERVER_URL = "http://192.168.1.144:8000" // change this for your server name!!!
 
 import UIKit
+import PhotosUI
 
-class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PHPickerViewControllerDelegate{
+
     
     let model = MlaasModel()
     var floatValue = 5.5
     let operationQueue = OperationQueue()
     let imagePicker = UIImagePickerController()
     var featureImage: UIImage?
+    
+    var selectedImages: [UIImage] = []
     
     @IBOutlet weak var mainTextView: UITextView!
     
@@ -69,13 +73,17 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
        }
    
     
-    @IBAction func pickImageButton(_ sender: UIButton) {
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = false
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
+    @IBAction func pickImages(_ sender: UIButton) {
+            var configuration = PHPickerConfiguration()
+            configuration.filter = .images // Only allow image selection
+            configuration.selectionLimit = 0 // 0 means no limit on the number of selections
+            
+        
+        //CHATGPT helped with this code as I was struggling to figure out how to be able to select multiple images at once and it suggestd to use the PHPickerViewController.
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
+            present(picker, animated: true, completion: nil)
+        }
     
     @IBAction func checkIfFaceMatchesPrediction(_ sender: Any) {
         //performSegue(withIdentifier: "FaceScanViewControllerSegue", sender: self)
@@ -224,28 +232,42 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            featureImage = image
-            mainTextView.text = "Image Successfully Uploaded"
-        } else {
-            print("No valid image found.")
-        }
-        picker.dismiss(animated: true, completion: nil) // Dismiss the picker after selection
-    }
     
-    // Create function to upload feature data with label
-    
-    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "FaceScanViewController" {
-            if let faceScanVC = segue.destination as? FaceScanViewController {
-                faceScanVC.delegate = self
+
+    //ChatGPT also said I needed a picker function and so did xcode errors so they both helped in creating this as they gave me basically the pseudo code when I needed help.
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+       
+        // Reset the selected images
+        selectedImages.removeAll()
+       
+        let group = DispatchGroup()
+       
+        for result in results {
+            group.enter()
+            if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
+                result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+                    defer { group.leave() }
+                   
+                    if let image = object as? UIImage {
+                       self?.selectedImages.append(image)
+                    } else if let error = error {
+                       print("Error loading image: \(error.localizedDescription)")
+                    }
+                }
+            } else {
+                group.leave()
             }
         }
-    }*/
-    
-    
+       
+        // Notify when all images are loaded
+        group.notify(queue: .main) { [weak self] in
+            print("Selected images count: \(self?.selectedImages.count ?? 0)")
+            // Perform any UI updates or further processing here
+        }
+    }
 }
+
 
 //MARK: Protocol Required Functions
 extension ViewController {
