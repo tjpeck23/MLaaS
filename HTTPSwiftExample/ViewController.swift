@@ -42,8 +42,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         // Do any additional setup after loading the view, typically from a nib.
         
         // setup URL Session
-        modelTypeSegmentedControl.addTarget(self, action: #selector(modelTypeChanged(_:)), for: .valueChanged)
-        
         // create reusable animation
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         animation.type = CATransitionType.reveal
@@ -60,19 +58,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
             }
         }
     }
-
-    //chatgpt helped me with this code for Mod B because I was confused and getting errors
-    @objc func modelTypeChanged(_ sender: UISegmentedControl) {
-           switch sender.selectedSegmentIndex {
-           case 0:
-               selectedModelType = "KNN"
-           case 1:
-               selectedModelType = "XGBoost"
-           default:
-               selectedModelType = "KNN" // Default fallback
-           }
-           print("Selected model type: \(selectedModelType)")
-       }
     
     @IBAction func uploadButtonTapped(_ sender: UIButton) {
            guard let image = UIImage(named: "sample_image") else { return }
@@ -80,7 +65,7 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
            
            // Pass the selected model type to uploadImageWithLabel
            let mlModel = MlaasModel()
-        mlModel.uploadImageWithLabel(image: image, label: label, modelType: selectedModelType)
+        mlModel.uploadImageWithLabel(image: image, label: label)
        }
    
     

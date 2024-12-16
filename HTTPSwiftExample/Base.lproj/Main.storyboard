@@ -20,67 +20,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter Label" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
-                                <rect key="frame" x="137" y="221" width="101" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvS-fr-lM6">
+                                <rect key="frame" x="115" y="221" width="145" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
-                                <rect key="frame" x="104" y="102" width="166" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6I-YmT">
                                 <rect key="frame" x="136" y="316" width="104" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Send Data"/>
                                 <connections>
                                     <action selector="sendDataButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="6wB-nA-UUh"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-7F-1zm">
-                                <rect key="frame" x="132" y="477" width="113" height="34.5"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-7F-1zm">
+                                <rect key="frame" x="131" y="441" width="113" height="34.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Train Model"/>
                                 <connections>
                                     <action selector="trainButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="TgD-sk-dr1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGC-Tp-ycJ">
-                                <rect key="frame" x="127" y="405" width="121" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGC-Tp-ycJ">
+                                <rect key="frame" x="127" y="380" width="121" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Authenticate"/>
                                 <connections>
-                                    <segue destination="reU-zH-WUY" kind="push" id="dBn-D0-wMy"/>
+                                    <segue destination="reU-zH-WUY" kind="push" identifier="toAuth" id="dBn-D0-wMy"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Authenticate Name" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OdV-Hx-qRD">
+                                <rect key="frame" x="111" y="524" width="152" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="enter your IP address" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbs-Ho-yMp">
+                                <rect key="frame" x="104" y="118" width="166" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="yvS-fr-lM6" firstAttribute="top" secondItem="Kbs-Ho-yMp" secondAttribute="bottom" constant="38" id="5QB-kX-ZXN"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="7w5-BR-Wra"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="E0J-Vu-Gfc"/>
-                            <constraint firstItem="7mH-7F-1zm" firstAttribute="top" secondItem="K3e-6I-YmT" secondAttribute="bottom" constant="102" id="HUB-C1-nTB"/>
-                            <constraint firstItem="aGC-Tp-ycJ" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="ODw-Wh-zsU"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="OGS-lG-vTh"/>
-                            <constraint firstItem="Kbs-Ho-yMp" firstAttribute="centerY" secondItem="TKu-f7-BkB" secondAttribute="centerY" id="YLR-qH-T5O"/>
-                            <constraint firstItem="aGC-Tp-ycJ" firstAttribute="top" secondItem="K3e-6I-YmT" secondAttribute="bottom" constant="54" id="ZXS-SD-0zG"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="firstBaseline" secondItem="yvS-fr-lM6" secondAttribute="baseline" constant="22" symbolType="layoutAnchor" id="c27-Zk-d6j"/>
-                            <constraint firstItem="yvS-fr-lM6" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="f7j-Yj-mpR"/>
-                            <constraint firstItem="K3e-6I-YmT" firstAttribute="leading" secondItem="TKu-f7-BkB" secondAttribute="leading" constant="150" id="oIF-eZ-PWN"/>
-                            <constraint firstItem="7mH-7F-1zm" firstAttribute="top" secondItem="aGC-Tp-ycJ" secondAttribute="bottom" constant="37" id="tkG-HD-chQ"/>
-                            <constraint firstItem="7mH-7F-1zm" firstAttribute="centerX" secondItem="TKu-f7-BkB" secondAttribute="centerX" id="v7N-wk-AiB"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ie3-Ff-CxR"/>
                     <connections>
+                        <outlet property="authName" destination="OdV-Hx-qRD" id="eoN-ES-f8l"/>
                         <outlet property="dataLabelOutlet" destination="yvS-fr-lM6" id="0hl-iI-1hf"/>
                         <outlet property="ipOutlet" destination="Kbs-Ho-yMp" id="hm3-rp-C10"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1246" y="-563"/>
+            <point key="canvasLocation" x="1245.5999999999999" y="-563.56821589205401"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="Jmk-mQ-Cmf">
@@ -172,14 +169,6 @@
                                     <segue destination="K64-Ri-AXi" kind="push" identifier="ShowDataViewController" id="m5c-on-uc1"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xa5-mJ-jJG">
-                                <rect key="frame" x="16" y="205" width="147" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="KNN"/>
-                                    <segment title="XGBoost"/>
-                                </segments>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -207,7 +196,6 @@
                     <connections>
                         <outlet property="checkFaceButton" destination="Bvz-fi-tBH" id="mlb-Rd-Myz"/>
                         <outlet property="mainTextView" destination="I7R-07-pqO" id="sEf-ID-vJd"/>
-                        <outlet property="modelTypeSegmentedControl" destination="xa5-mJ-jJG" id="ePB-oB-huD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

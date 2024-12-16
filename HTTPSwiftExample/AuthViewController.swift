@@ -8,10 +8,12 @@
 
 import UIKit
 import AVFoundation
-import Vision
+
 
 class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
+    var timer: Timer?
+    var receivedText = ""
     let mlaasmodel = MlaasModel()
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
@@ -21,11 +23,12 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         super.viewDidLoad()
         setupCamera()
         // Do any additional setup after loading the view.
+        startTimer()
     }
     
     func setupCamera() {
         captureSession = AVCaptureSession()
-        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
+        guard let videoCaptureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
             print("No camera is available")
             return
         }
@@ -59,10 +62,26 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         let uiImage = UIImage(ciImage: ciImage)
         
         DispatchQueue.main.async {
-            self.mlaasmodel.uploadImageWithLabel(image: uiImage, label: "", modelType: "KNN")
+            self.featureImage = uiImage
         }
     }
     
+    func startTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTask), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTask() {
+        DispatchQueue.main.async {
+            //task
+            self.mlaasmodel.uploadImageWithLabel(image: self.featureImage!, label: "")
+            
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
     
     /*
     // MARK: - Navigation
