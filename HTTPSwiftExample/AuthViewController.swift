@@ -11,6 +11,7 @@ import AVFoundation
 
 class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
+    var receivedText = ""
     let mlaasmodel = MlaasModel()
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
