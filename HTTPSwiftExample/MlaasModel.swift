@@ -346,6 +346,31 @@ class MlaasModel: NSObject, URLSessionDelegate {
     }
     
     
+    func uploadSecretImage(image: [UIImage], trustedParties: String) {
+        
+        for image in image {
+            guard let pixelBuffer = preprocessImage(image) else {
+                print("Error: could not preprocess image")
+                continue
+            }
+            // Convert pixel buffer to an array of doubles
+            guard let dataVector = pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
+                print("Error: Could not convert pixel buffer to data vector")
+                continue
+            }
+            if dataVector.isEmpty {
+                print("Error: Data vector is empty")
+                continue
+            }
+            
+            let labels = [trustedParties]
+            
+            postSecret(dataVector, trustedParties: labels)
+        }
+    }
+    
+    
+    
     //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
     
     func sendGetRequest(request: URLRequest, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {

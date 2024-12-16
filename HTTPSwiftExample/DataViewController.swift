@@ -17,6 +17,8 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     @IBOutlet weak var dataLabelOutlet: UITextField!
     @IBOutlet weak var predictLabel: UILabel!
     @IBOutlet weak var authName: UITextField!
+    @IBOutlet weak var trustedPartyField: UITextField!
+    
     
     let mlaasmodel = MlaasModel()
     
@@ -54,6 +56,19 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         
     }
     
+    @IBAction func uploadSecretButton(_ sender: Any) {
+        guard !self.selectedImages.isEmpty
+            else {
+            print("No image selected")
+            return
+        }
+        
+        
+        //let userip = ipOutlet.text ?? ""
+        let label = trustedPartyField.text ?? ""
+        
+        mlaasmodel.uploadSecretImage(image: self.selectedImages, trustedParties: label)
+    }
     @IBAction func trainButton(_ sender: UIButton) {
         mlaasmodel.trainModel()
     }
