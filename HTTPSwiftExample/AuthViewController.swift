@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Vision
 import AVFoundation
 
 
@@ -18,10 +19,17 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
     var featureImage: UIImage?
+    
+    var detectedFaces: [String] = [] // Store detected face labels
+    var currentPixelBuffer: CVPixelBuffer?
+    
+    // Vision requests
+    private var detectionRequests: [VNRequest] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCamera()
+        self.prepareVisionRequest()
         // Do any additional setup after loading the view.
         startTimer()
     }
@@ -58,6 +66,32 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             return
         }
         
+        // Save the pixel buffer for other uses if needed
+        self.currentPixelBuffer = pixelBuffer
+        
+        let exifOrientation = CGImagePropertyOrientation.right
+        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientation, options: [:])
+        
+        do {
+            try imageRequestHandler.perform(detectionRequests)
+        } catch {
+            print("Failed to perform Vision request: \(error.localizedDescription)")
+        }
+        
+        guard let results = detectionRequests.first?.results as? [VNFaceObservation] else {
+            print("no results from face detection")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            if results.count > 1 {
+                self.resetApp()
+            } else if results.isEmpty {
+                self.resetApp()
+            }
+        }
+        
+        // Predicts faces
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let uiImage = UIImage(ciImage: ciImage)
         
@@ -73,7 +107,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     @objc func updateTask() {
         DispatchQueue.main.async {
             //task
-            self.mlaasmodel.uploadImageWithLabel(image: self.featureImage!, label: "")
+            self.mlaasmodel.uploadImageWithLabel(images: self.featureImage!, label: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 if self.receivedText != self.mlaasmodel.pred {
@@ -96,14 +130,69 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // Prepare Vision request
+    fileprivate func prepareVisionRequest() {
+        let faceDetectionRequest = VNDetectFaceRectanglesRequest { [weak self] request, error in
+            self?.handleFaceDetectionResults(request: request, error: error)
+        }
+        self.detectionRequests = [faceDetectionRequest]
     }
-    */
+    
+    // Handle Vision face detection results
+    private func handleFaceDetectionResults(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation] else {
+            print("No faces detected.")
+            return
+        }
+        
+        detectedFaces.removeAll() // Clear previous results
+        
+        for (index, face) in results.enumerated() {
+            if let pixelBuffer = self.currentPixelBuffer { // Ensure currentPixelBuffer exists
+                processFace(observation: face, pixelBuffer: pixelBuffer, index: index) // Pass pixelBuffer
+            } else {
+                print("Error: No valid pixel buffer available.")
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.updateUIWithDetectedFaces()
+        }
+    }
+    
+    // Process individual face observations
+    func processFace(observation: VNFaceObservation, pixelBuffer: CVPixelBuffer, index: Int) {
+        // Convert the pixel buffer to a CIImage
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let size = ciImage.extent.size
+
+        // Calculate the face bounding box in image coordinates
+        let x = observation.boundingBox.origin.x * size.width
+        let y = (1 - observation.boundingBox.origin.y - observation.boundingBox.height) * size.height
+        let width = observation.boundingBox.width * size.width
+        let height = observation.boundingBox.height * size.height
+
+        let faceRect = CGRect(x: x, y: y, width: width, height: height).integral
+
+        // Crop and process the face region
+        let croppedFace = ciImage.cropped(to: faceRect)
+        let faceImage = UIImage(ciImage: croppedFace)
+        //sendFaceToServer(image: faceImage, faceIndex: Travis)
+        
+    }
+    
+    // Send the cropped face to the server
+    private func sendFaceToServer(image: UIImage, faceIndex: Int) {
+        let label = "Face \(faceIndex + 1)"
+        mlaasmodel.uploadImageWithLabel(images: [image], label: label)
+        detectedFaces.append(label)
+    }
+    
+    // Update the UI with detected faces
+    private func updateUIWithDetectedFaces() {
+        
+        // Add UI updates here, such as updating a label or table view
+    }
+    
 
 }

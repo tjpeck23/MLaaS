@@ -119,7 +119,7 @@ class FaceScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     // Send the cropped face to the server
     private func sendFaceToServer(image: UIImage, faceIndex: Int) {
         let label = "Face \(faceIndex + 1)"
-        mlaasModel.uploadImageWithLabel(image: image, label: label)
+        mlaasModel.uploadImageWithLabel(images: [image], label: label)
         detectedFaces.append(label)
     }
     

@@ -49,7 +49,7 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         //let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
-        mlaasmodel.uploadImageWithLabel(image: vector, label: label)
+        mlaasmodel.uploadImageWithLabel(images: [vector], label: label)
         
         
     }

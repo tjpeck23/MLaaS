@@ -35,7 +35,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
     var server_ip:String = "192.168.1.220"
-    private var  dsid:Int = 4
+    private var  dsid:Int = 5
     var delegate:ClientDelegate?
     var pred = ""
     
@@ -320,31 +320,30 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
     
     // Function that combines our preprocessing functions and sends to server
-    func uploadImageWithLabel(image: UIImage, label: String) {
+    func uploadImageWithLabel(images: [UIImage], label: String) {
         
-        
-        guard let pixelBuffer = preprocessImage(image) else {
-                print("Error: Could not preprocess image")
-                return
+        for image in images {
+            guard let pixelBuffer = preprocessImage(image) else {
+                print("Error: could not preprocess image")
+                continue
             }
-
             // Convert pixel buffer to an array of doubles
-        guard let dataVector = pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
+            guard let dataVector = pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
                 print("Error: Could not convert pixel buffer to data vector")
-                return
+                continue
             }
-        
-        if dataVector.isEmpty {
-            print("Error: Data vector is empty")
-            return
+            if dataVector.isEmpty {
+                print("Error: Data vector is empty")
+                continue
+            }
+            
+            if label.isEmpty {
+                sendData(dataVector)
+            } else {
+                sendData(dataVector, withLabel: label)
+            }
         }
-        
-        if !label.isEmpty {
-               sendData(dataVector, withLabel: label)
-           } else {
-               sendData(dataVector)
-           }
-       }
+    }
     
     
     //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
