@@ -75,13 +75,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A32-WJ-JHZ">
-                                <rect key="frame" x="216" y="589" width="133" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfZ-rG-5Pq">
+                                <rect key="frame" x="188" y="588" width="133" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Upload Secret"/>
                                 <connections>
-                                    <action selector="uploadSecretButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="XuU-Cz-oYT"/>
+                                    <action selector="uploadSecretButton:" destination="K64-Ri-AXi" eventType="touchUpInside" id="kIU-XC-Prt"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -93,7 +93,6 @@
                         <outlet property="dataLabelOutlet" destination="yvS-fr-lM6" id="0hl-iI-1hf"/>
                         <outlet property="ipOutlet" destination="Kbs-Ho-yMp" id="hm3-rp-C10"/>
                         <outlet property="trustedPartyField" destination="sSQ-1a-YdG" id="15C-Vp-Q50"/>
-                        <outlet property="uploadSecretButton" destination="A32-WJ-JHZ" id="Si1-mw-ecV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bmf-gF-jm7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

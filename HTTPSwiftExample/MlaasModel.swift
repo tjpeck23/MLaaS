@@ -34,7 +34,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
-    var server_ip:String = "192.168.1.220"
+    var server_ip:String = "192.168.1.71"
     private var  dsid:Int = 5
     var delegate:ClientDelegate?
     var pred = ""
@@ -49,9 +49,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
     
     private let session: URLSession = {
         let sessionConfig = URLSessionConfiguration.ephemeral
-        sessionConfig.timeoutIntervalForRequest = 20.0
-        sessionConfig.timeoutIntervalForResource = 20.0
-        sessionConfig.httpMaximumConnectionsPerHost = 20
+        sessionConfig.timeoutIntervalForRequest = 30.0
+        sessionConfig.timeoutIntervalForResource = 30.0
+        sessionConfig.httpMaximumConnectionsPerHost = 30
         return URLSession(configuration: sessionConfig)
     }()
     
