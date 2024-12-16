@@ -199,7 +199,7 @@ class SecretDataPoint(BaseModel):
         json_schema_extra={ # provide an example for FastAPI to show users
             "example": {
                 "feature": [-0.6,4.1,5.0,6.0],
-                "trustedParties": ["Ash Ketchum", "Kakarot"]
+                "trustedParties": ["Ash Ketchum", "Kakarot"],
                 "dsid": 2,
             }
         },
@@ -256,7 +256,7 @@ async def list_datapoints(dsid: int):
 
     The response is unpaginated and limited to 1000 results.
     """
-    return SecretDataPointCollection(datapoints=await app.collection.find({"dsid": dsid})
+    return SecretDataPointCollection(datapoints=await app.collection.find({"dsid": dsid}))
 
 
 #===========================================
@@ -273,6 +273,7 @@ async def list_datapoints(dsid: int):
     status_code=status.HTTP_201_CREATED,
     response_model_by_alias=False,
 )
+
 async def create_datapoint(datapoint: LabeledDataPoint = Body(...)):
     """
     Insert a new data point. Let user know the range of values inserted
