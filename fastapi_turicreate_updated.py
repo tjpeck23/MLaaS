@@ -199,7 +199,7 @@ class SecretDataPoint(BaseModel):
         json_schema_extra={ # provide an example for FastAPI to show users
             "example": {
                 "feature": [-0.6,4.1,5.0,6.0],
-                "label": ["Ash Ketchum", "Kakarot"]
+                "trustedParties": ["Ash Ketchum", "Kakarot"]
                 "dsid": 2,
             }
         },
@@ -214,6 +214,49 @@ class SecretDataPointCollection(BaseModel):
     """
 
     datapoints: List[SecretDataPoint]
+
+@app.post(
+    "/secret_data/",
+    response_description="Add new secret datapoint",
+    response_model=SecretDataPoint,
+    status_code=status.HTTP_201_CREATED,
+    response_model_by_alias=False,
+)
+async def create_secret_datapoint(datapoint: SecretDataPoint = Body(...)):
+    """
+    Insert a new data point. Let user know the range of values inserted
+
+    A unique `id` will be created and provided in the response.
+    """
+    
+    # insert this datapoint into the database
+    new_label = await app.collection.insert_one(
+        datapoint.model_dump(by_alias=True, exclude=["id"])
+    )
+
+    # send back info about the record
+    created_label = await app.collection.find_one(
+        {"_id": new_label.inserted_id}
+    )
+    # also min/max of array, rather than the entire to array to save some bandwidth
+    # the datapoint variable is a pydantic model, so we can access with properties
+    # but the output of mongo is a dictionary, so we need to subscript the entry
+
+    return created_label
+    
+@app.get(
+    "/secret_data/{dsid}",
+    response_description="List all labeled data in a given dsid",
+    response_model=SecretDataPointCollection,
+    response_model_by_alias=False,
+)
+async def list_datapoints(dsid: int):
+    """
+    List all of the data for a given dsid in the database.
+
+    The response is unpaginated and limited to 1000 results.
+    """
+    return SecretDataPointCollection(datapoints=await app.collection.find({"dsid": dsid})
 
 
 #===========================================
