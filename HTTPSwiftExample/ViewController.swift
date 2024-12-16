@@ -80,6 +80,8 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
    
     
     @IBAction func pickImageButton(_ sender: UIButton) {
+        self.selectedImages.removeAll()
+        
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.selectionLimit = 0 // Allow multiple selection
         config.filter = .images // Restrict to images
@@ -87,7 +89,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
-
     }
     
     

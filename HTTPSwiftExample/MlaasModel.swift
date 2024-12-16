@@ -35,7 +35,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
     var server_ip:String = "192.168.1.71"
-    private var  dsid:Int = 5
+    private var  dsid:Int = 8
     var delegate:ClientDelegate?
     var pred = ""
     

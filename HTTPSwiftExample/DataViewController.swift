@@ -52,6 +52,7 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         
         mlaasmodel.uploadImageWithLabel(images: self.selectedImages, label: label)
         
+        self.selectedImages = []
         
     }
     
