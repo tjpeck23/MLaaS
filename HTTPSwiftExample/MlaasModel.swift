@@ -170,43 +170,39 @@ class MlaasModel: NSObject, URLSessionDelegate {
             task.resume()
     }
     
-    func sendData(_ array:[Double]){
-        print("Sending data to server for prediction")
-        let baseURL = "http://\(server_ip):8000/predict_turi/"
-        let postUrl = URL(string: "\(baseURL)")
-        
-        // create a custom HTTP POST request
-        var request = URLRequest(url: postUrl!)
-        
-        // utility method to use from below
-        let requestBody:Data = try! JSONSerialization.data(withJSONObject: ["feature":array,
-            "dsid":dsid])
-        
-        // The Type of the request is given here
+    func sendData(_ array: [Double], withLabel label: String, completion: (() -> Void)? = nil) {
+        let baseURL = "http://\(server_ip):8000/labeled_data/"
+        guard let postURL = URL(string: "\(baseURL)") else {
+            completion?()
+            return
+        }
+
+        var request = URLRequest(url: postURL)
+        let requestBody: Data = try! JSONSerialization.data(withJSONObject: [
+            "feature": array,
+            "label": label,
+            "dsid": self.dsid
+        ])
+
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
-        
-        let postTask : URLSessionDataTask = self.session.dataTask(with: request,
-                        completionHandler:{(data, response, error) in
-            
-            if(error != nil){
-                print("Error from server")
-                if let res = response{
-                    print("Response:\n",res)
-                }
-            }
-            else{
-                if let jsonDictionary = self.convertDataToDictionary(with: data) as? [String: Any] {
-                    self.receivedPrediction(jsonDictionary)
-                } else {
-                    print("Error: Could not convert data to dictionary")
-                }
 
+        let postTask: URLSessionDataTask = self.session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion?() // Call completion even on failure
+                return
             }
-        })
-        
-        postTask.resume() // start the task
+            guard let data = data else {
+                completion?()
+                return
+            }
+            let jsonDictionary = self.convertDataToDictionary(with: data)
+            print("Response: \(jsonDictionary)")
+            completion?()
+        }
+        postTask.resume()
     }
     
     func getNewDsid(){
@@ -247,7 +243,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         UIGraphicsEndImageContext()
 
         guard let cgImage = resizedImage?.cgImage else {
-            print("Could not convert image to CGImage")
+            print("Error: Could not convert image to CGImage")
             return nil
         }
 
@@ -257,7 +253,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
         var pixelBuffer: CVPixelBuffer?
 
-        // Create the pixel buffer with the appropriate dimensions and color format
         let status = CVPixelBufferCreate(kCFAllocatorDefault,
                                          Int(targetSize.width),
                                          Int(targetSize.height),
@@ -266,22 +261,15 @@ class MlaasModel: NSObject, URLSessionDelegate {
                                          &pixelBuffer)
 
         guard status == kCVReturnSuccess, let buffer = pixelBuffer else {
-            print("Could not convert image to pixel buffer")
+            print("Error: Could not create pixel buffer")
             return nil
         }
 
-        // Lock the buffer base address for read-only access
         CVPixelBufferLockBaseAddress(buffer, .readOnly)
 
-        // Render the CIImage into the pixel buffer
         context.render(ciImage, to: buffer, bounds: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height), colorSpace: colorSpace)
 
-        // Unlock the base address after rendering
         CVPixelBufferUnlockBaseAddress(buffer, .readOnly)
-        
-        /*if let pixelArray = pixelBufferToDoubleArray(pixelBuffer: buffer) {
-                print("Pixel array: \(pixelArray)")  // This will print the array
-            }*/
 
         return buffer
     }
@@ -320,32 +308,37 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
     
     // Function that combines our preprocessing functions and sends to server
-    func uploadImageWithLabel(image: UIImage, label: String) {
-        
-        
-        guard let pixelBuffer = preprocessImage(image) else {
-                print("Error: Could not preprocess image")
-                return
-            }
+    func uploadMultipleImagesWithLabel(images: [UIImage], label: String) {
+        let dispatchGroup = DispatchGroup()
 
-            // Convert pixel buffer to an array of doubles
-        guard let dataVector = pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
-                print("Error: Could not convert pixel buffer to data vector")
-                return
+        for image in images {
+            dispatchGroup.enter() // Track each upload task
+
+            DispatchQueue.global(qos: .background).async {
+                guard let pixelBuffer = self.preprocessImage(image) else {
+                    print("Error: Could not preprocess image")
+                    dispatchGroup.leave() // Task failed, leave the group
+                    return
+                }
+
+                guard let dataVector = self.pixelBufferToDoubleArray(pixelBuffer: pixelBuffer) else {
+                    print("Error: Could not convert pixel buffer to data vector")
+                    dispatchGroup.leave()
+                    return
+                }
+
+                // Perform the data upload
+                self.sendData(dataVector, withLabel: label) {
+                    dispatchGroup.leave() // Mark this task as completed
+                }
             }
-        
-        if dataVector.isEmpty {
-            print("Error: Data vector is empty")
-            return
         }
-        
-        if !label.isEmpty {
-               sendData(dataVector, withLabel: label)
-           } else {
-               sendData(dataVector)
-           }
-       }
-    
+
+        // Notify when all uploads are completed
+        dispatchGroup.notify(queue: .main) {
+            print("All image uploads completed.")
+        }
+    }
     
     //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
     

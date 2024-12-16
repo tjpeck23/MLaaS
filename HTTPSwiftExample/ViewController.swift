@@ -64,13 +64,13 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
     
     @IBAction func uploadButtonTapped(_ sender: UIButton) {
-           guard let image = UIImage(named: "sample_image") else { return }
-           let label = "ExampleLabel" // Replace with user input if applicable
-           
-           // Pass the selected model type to uploadImageWithLabel
-           let mlModel = MlaasModel()
-        mlModel.uploadImageWithLabel(image: image, label: label)
-       }
+        guard let image = UIImage(named: "sample_image") else { return }
+        let label = "ExampleLabel" // Replace with user input if applicable
+        
+        // Pass the single image as an array
+        let mlModel = MlaasModel()
+        mlModel.uploadMultipleImagesWithLabel(images: [image], label: label)
+    }
    
     
     @IBAction func pickImages(_ sender: UIButton) {
@@ -231,7 +231,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         //postTask.resume() // start the task
         
     }
-    
     
 
     //ChatGPT also said I needed a picker function and so did xcode errors so they both helped in creating this as they gave me basically the pseudo code when I needed help.
