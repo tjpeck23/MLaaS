@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+
 class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     
