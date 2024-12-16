@@ -35,7 +35,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
     var server_ip:String = "192.168.1.220"
-    private var  dsid:Int = 4
+    private var  dsid:Int = 5
     var delegate:ClientDelegate?
     var pred = ""
     
@@ -339,6 +339,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
             print("All image uploads completed.")
         }
     }
+    
     
     //MARK: These are older methods below. Not sure if we will use them. Getdata seems more intuitive to me - Travis
     

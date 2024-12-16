@@ -20,7 +20,7 @@ let SERVER_URL = "http://192.168.1.144:8000" // change this for your server name
 import UIKit
 import PhotosUI
 
-class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PHPickerViewControllerDelegate{
+class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
 
     
     let model = MlaasModel()
@@ -58,10 +58,13 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         if segue.identifier == "ShowDataViewController" {  // Ensure this matches the identifier in the storyboard
             if let dataVC = segue.destination as? DataViewController {
                 // Pass data to DataViewController
-                dataVC.featureImage = self.featureImage
+                if let selectedImages = sender as? [UIImage] {
+                    dataVC.selectedImages = selectedImages
+                }
             }
         }
     }
+    
     
     @IBAction func uploadButtonTapped(_ sender: UIButton) {
         guard let image = UIImage(named: "sample_image") else { return }
@@ -73,17 +76,17 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     }
    
     
-    @IBAction func pickImages(_ sender: UIButton) {
-            var configuration = PHPickerConfiguration()
-            configuration.filter = .images // Only allow image selection
-            configuration.selectionLimit = 0 // 0 means no limit on the number of selections
-            
+    @IBAction func pickImageButton(_ sender: UIButton) {
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 0
+        config.filter = .images
         
-        //CHATGPT helped with this code as I was struggling to figure out how to be able to select multiple images at once and it suggestd to use the PHPickerViewController.
-            let picker = PHPickerViewController(configuration: configuration)
-            picker.delegate = self
-            present(picker, animated: true, completion: nil)
-        }
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        
+        present(picker, animated: true, completion: nil)
+    }
+    
     
     @IBAction func checkIfFaceMatchesPrediction(_ sender: Any) {
         //performSegue(withIdentifier: "FaceScanViewControllerSegue", sender: self)
@@ -277,6 +280,24 @@ extension ViewController {
     
 }
 
+extension ViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                if let image = image as? UIImage {
+                    self.selectedImages.append(image)
+                }
+                
+                if self.selectedImages.count == results.count {
+                    self.performSegue(withIdentifier: "ShowDataViewController", sender: self.selectedImages)
+                }
+            }
+        }
+    }
+}
 
 
 
