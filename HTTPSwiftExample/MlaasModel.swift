@@ -49,9 +49,9 @@ class MlaasModel: NSObject, URLSessionDelegate {
     
     private let session: URLSession = {
         let sessionConfig = URLSessionConfiguration.ephemeral
-        sessionConfig.timeoutIntervalForRequest = 5.0
-        sessionConfig.timeoutIntervalForResource = 8.0
-        sessionConfig.httpMaximumConnectionsPerHost = 10
+        sessionConfig.timeoutIntervalForRequest = 20.0
+        sessionConfig.timeoutIntervalForResource = 20.0
+        sessionConfig.httpMaximumConnectionsPerHost = 20
         return URLSession(configuration: sessionConfig)
     }()
     
@@ -81,6 +81,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         postTask.resume()
     }
+    
     func postSecret(_ array: [Double], trustedParties: [String]) {
         let baseURL = "http://\(server_ip):8000/secret_data/"
         guard let postURL = URL(string: "\(baseURL)") else { return }
