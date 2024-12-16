@@ -175,6 +175,46 @@ class FeatureDataPoint(BaseModel):
     )
 
 
+#===========================================
+#   FastAPI methods, for uploading secret docs with db
+#-------------------------------------------
+# This is for uploading the secret docs.
+
+
+
+class SecretDataPoint(BaseModel):
+    """
+    Container for a single labeled data point.
+    """
+
+    # This will be aliased to `_id` when sent to MongoDB,
+    # but provided as `id` in the API requests and responses.
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+    feature: List[float] = Field(...) # feature data as array
+    trustedParties: List[str] = Field(...) # label for this data
+    dsid: int = Field(..., le=50) # dataset id, for tracking different sets
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_schema_extra={ # provide an example for FastAPI to show users
+            "example": {
+                "feature": [-0.6,4.1,5.0,6.0],
+                "label": ["Ash Ketchum", "Kakarot"]
+                "dsid": 2,
+            }
+        },
+    )
+
+
+class SecretDataPointCollection(BaseModel):
+    """
+    A container holding a list of instances.
+
+    This exists because providing a top-level array in a JSON response can be a [vulnerability](https://haacked.com/archive/2009/06/25/json-hijacking.aspx/)
+    """
+
+    datapoints: List[SecretDataPoint]
+
 
 #===========================================
 #   FastAPI methods, for interacting with db 

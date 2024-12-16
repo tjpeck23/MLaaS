@@ -255,11 +255,15 @@ extension ViewController: PHPickerViewControllerDelegate {
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                 if let image = image as? UIImage {
-                    self.selectedImages.append(image)
+                    DispatchQueue.main.async {
+                        self.selectedImages.append(image)
+                    }
                 }
                 
                 if self.selectedImages.count == results.count {
-                    self.performSegue(withIdentifier: "ShowDataViewController", sender: self.selectedImages)
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "ShowDataViewController", sender: self.selectedImages)
+                    }
                 }
             }
         }
