@@ -67,16 +67,19 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     }
     
     func startTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTask), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(updateTask), userInfo: nil, repeats: true)
     }
     
     @objc func updateTask() {
         DispatchQueue.main.async {
             //task
             self.mlaasmodel.uploadImageWithLabel(image: self.featureImage!, label: "")
-            if self.receivedText != self.mlaasmodel.pred {
-                print(self.receivedText, " is not ", "\(self.mlaasmodel.pred)!")
-                self.resetApp()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if self.receivedText != self.mlaasmodel.pred {
+                    print(self.receivedText, " is not ", "\(self.mlaasmodel.pred)!")
+                    self.resetApp()
+                }
             }
         }
     }
