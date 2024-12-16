@@ -65,7 +65,7 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
            
            // Pass the selected model type to uploadImageWithLabel
            let mlModel = MlaasModel()
-        mlModel.uploadImageWithLabel(image: image, label: label, modelType: selectedModelType)
+        mlModel.uploadImageWithLabel(image: image, label: label)
        }
    
     
