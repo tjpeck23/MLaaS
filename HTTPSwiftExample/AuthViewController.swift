@@ -18,7 +18,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     let mlaasmodel = MlaasModel()
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
-    var featureImage: UIImage?
+    var featureImage: [UIImage] = []
     
     var detectedFaces: [String] = [] // Store detected face labels
     var currentPixelBuffer: CVPixelBuffer?
@@ -96,7 +96,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         let uiImage = UIImage(ciImage: ciImage)
         
         DispatchQueue.main.async {
-            self.featureImage = uiImage
+            self.featureImage = [uiImage]
         }
     }
     
@@ -107,7 +107,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     @objc func updateTask() {
         DispatchQueue.main.async {
             //task
-            self.mlaasmodel.uploadImageWithLabel(images: self.featureImage!, label: "")
+            self.mlaasmodel.uploadImageWithLabel(images: self.featureImage, label: "")
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 if self.receivedText != self.mlaasmodel.pred {

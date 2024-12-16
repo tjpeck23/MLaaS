@@ -20,7 +20,7 @@ let SERVER_URL = "http://192.168.1.144:8000" // change this for your server name
 import UIKit
 import PhotosUI
 
-class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PHPickerViewControllerDelegate{
+class ViewController: UIViewController, URLSessionDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
 
     
     let model = MlaasModel()
@@ -58,10 +58,13 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         if segue.identifier == "ShowDataViewController" {  // Ensure this matches the identifier in the storyboard
             if let dataVC = segue.destination as? DataViewController {
                 // Pass data to DataViewController
-                dataVC.featureImage = self.featureImage
+                if let selectedImages = sender as? [UIImage] {
+                    dataVC.selectedImages = selectedImages
+                }
             }
         }
     }
+    
     
     @IBAction func uploadButtonTapped(_ sender: UIButton) {
            guard let image = UIImage(named: "sample_image") else { return }
@@ -232,40 +235,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
         
     }
     
-    
-
-    //ChatGPT also said I needed a picker function and so did xcode errors so they both helped in creating this as they gave me basically the pseudo code when I needed help.
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true, completion: nil)
-       
-        // Reset the selected images
-        selectedImages.removeAll()
-       
-        let group = DispatchGroup()
-       
-        for result in results {
-            group.enter()
-            if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
-                    defer { group.leave() }
-                   
-                    if let image = object as? UIImage {
-                       self?.selectedImages.append(image)
-                    } else if let error = error {
-                       print("Error loading image: \(error.localizedDescription)")
-                    }
-                }
-            } else {
-                group.leave()
-            }
-        }
-       
-        // Notify when all images are loaded
-        group.notify(queue: .main) { [weak self] in
-            print("Selected images count: \(self?.selectedImages.count ?? 0)")
-            // Perform any UI updates or further processing here
-        }
-    }
 }
 
 
@@ -282,17 +251,15 @@ extension ViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         
-        var selectedImages: [UIImage] = []
         
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                 if let image = image as? UIImage {
-                    selectedImages.append(image)
+                    self.selectedImages.append(image)
                 }
                 
-                if selectedImages.count == results.count {
-                    self.featureImage = selectedImages
-                    self.performSegue(withIdentifierL: "ShowDataViewController", sender: selectedImages)
+                if self.selectedImages.count == results.count {
+                    self.performSegue(withIdentifier: "ShowDataViewController", sender: self.selectedImages)
                 }
             }
         }

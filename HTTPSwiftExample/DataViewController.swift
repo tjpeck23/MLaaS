@@ -20,7 +20,7 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     
     let mlaasmodel = MlaasModel()
     
-    var featureImage: UIImage?
+    var selectedImages: [UIImage] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,21 +38,21 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     
     @IBAction func sendDataButton(_ sender: Any) {
         
-        guard let selectedImage = featureImage
+        guard !self.selectedImages.isEmpty
             else {
             print("No image selected")
             return
         }
         
-        let vector = selectedImage
         
         //let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
-        mlaasmodel.uploadImageWithLabel(images: [vector], label: label)
+        mlaasmodel.uploadImageWithLabel(images: self.selectedImages, label: label)
         
         
     }
+    
     @IBAction func trainButton(_ sender: UIButton) {
         mlaasmodel.trainModel()
     }
