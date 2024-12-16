@@ -35,7 +35,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     weak var predDelegate: PredictionDelegate?
     private let operationQueue = OperationQueue()
     var server_ip:String = "192.168.1.220"
-    private var  dsid:Int = 3
+    private var  dsid:Int = 4
     var delegate:ClientDelegate?
     
     // public access methods
@@ -54,7 +54,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         return URLSession(configuration: sessionConfig)
     }()
     
-    func sendData(_ array: [Double], withLabel label: String, modelType: String) {
+    func sendData(_ array: [Double], withLabel label: String) {
         let baseURL = "http://\(server_ip):8000/labeled_data/"
         guard let postURL = URL(string: "\(baseURL)") else { return }
         
@@ -62,8 +62,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         let requestBody: Data = try! JSONSerialization.data(withJSONObject: [
             "feature": array,
             "label": label,
-            "dsid": self.dsid,
-            "modelType": modelType
+            "dsid": self.dsid
         ])
         
         request.httpMethod = "POST"
@@ -320,7 +319,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
 
     
     // Function that combines our preprocessing functions and sends to server
-    func uploadImageWithLabel(image: UIImage, label: String, modelType: String) {
+    func uploadImageWithLabel(image: UIImage, label: String) {
         
         
         guard let pixelBuffer = preprocessImage(image) else {
@@ -340,7 +339,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
         
         if !label.isEmpty {
-               sendData(dataVector, withLabel: label, modelType: modelType)
+               sendData(dataVector, withLabel: label)
            } else {
                sendData(dataVector)
            }
