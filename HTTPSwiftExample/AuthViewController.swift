@@ -23,6 +23,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         super.viewDidLoad()
         setupCamera()
         // Do any additional setup after loading the view.
+        startTimer()
     }
     
     func setupCamera() {
