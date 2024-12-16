@@ -57,16 +57,13 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowDataViewController" {
             if let dataVC = segue.destination as? DataViewController {
-                // Safely cast sender as [UIImage]
-                if let selectedImages = sender as? [UIImage] {
-                    // Pass the images to the next view controller
-                    dataVC.selectedImages = selectedImages
-                } else {
-                    print("Failed to cast sender as [UIImage]. sender is: \(String(describing: sender))")
-                }
+                // Pass the images directly, no optional binding needed since selectedImages is non-optional
+                dataVC.selectedImages = self.selectedImages
             }
         }
     }
+
+
 
 
 
