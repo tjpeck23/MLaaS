@@ -347,7 +347,7 @@ def read_root():
     response_description="Train a machine learning model for the given dsid",
     response_model_by_alias=False,
 )
-async def train_model_turi(dsid: int, model_type: str = "KNN"):  # Default to "KNN"
+async def train_model_turi(dsid: int):  # Default to "KNN"
     """
     Train the machine learning model using Turi
     """
@@ -363,23 +363,16 @@ async def train_model_turi(dsid: int, model_type: str = "KNN"):  # Default to "K
     data = tc.SFrame(data={"target":[datapoint["label"] for datapoint in datapoints], 
         "sequence":np.array([datapoint["feature"] for datapoint in datapoints])}
     )
-        
-    # Create the classifier model based on specified type 
-    #this is for module B
-    if model_type == "KNN":
-        model = tc.knn.create(data, target="target", verbose=0)
-    elif model_type == "XGBoost":
-        model = tc.xgboost.create(data, target="target", verbose=0)
-    else:
-        raise HTTPException(status_code=400, detail=f"Unsupported model type: {model_type}")
     
+    model = tc.classifier.create(data, target="target", verbose=0)
+
     # Save model for later use
-    model.save(f"/Users/travisjpeck/Desktop/models/turi_model_dsid{dsid}_{model_type}")
+    model.save(f"/Users/travisjpeck/Desktop/models/turi_model_dsid{dsid}")
 
     # Save model to app.clf for later use
     app.clf[dsid] = model
 
-    return {"summary": f"Model trained with {model_type} for DSID {dsid}"}
+    return {"summary": f"{model}"}
     
 
 
