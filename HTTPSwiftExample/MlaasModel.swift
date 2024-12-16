@@ -104,7 +104,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
             }
             guard let data = data else { return }
             let jsonDictionary = self.convertDataToDictionary(with: data)
-            print(jsonDictionary)
+            //print(jsonDictionary)
         }
         postTask.resume()
     }
