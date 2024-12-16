@@ -85,9 +85,9 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         
         DispatchQueue.main.async {
             if results.count > 1 {
-                self.resetApp()
+                exit(0)
             } else if results.isEmpty {
-                self.resetApp()
+                exit(0)
             }
         }
         
@@ -112,7 +112,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 if self.receivedText != self.mlaasmodel.pred {
                     print(self.receivedText, " is not ", "\(self.mlaasmodel.pred)!")
-                    self.resetApp()
+                    exit(0)
                 }
             }
         }
