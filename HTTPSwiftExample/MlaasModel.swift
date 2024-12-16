@@ -37,6 +37,7 @@ class MlaasModel: NSObject, URLSessionDelegate {
     var server_ip:String = "192.168.1.220"
     private var  dsid:Int = 4
     var delegate:ClientDelegate?
+    var pred = ""
     
     // public access methods
     func updateDsid(_ newDsid:Int){
@@ -197,7 +198,6 @@ class MlaasModel: NSObject, URLSessionDelegate {
             else{
                 if let jsonDictionary = self.convertDataToDictionary(with: data) as? [String: Any] {
                     self.receivedPrediction(jsonDictionary)
-                    print(self.receivedPrediction(jsonDictionary))
                 } else {
                     print("Error: Could not convert data to dictionary")
                 }
@@ -381,10 +381,11 @@ class MlaasModel: NSObject, URLSessionDelegate {
         }
     }
     
-    func receivedPrediction(_ prediction: [String:Any]){
+    func receivedPrediction(_ prediction: [String:Any]) {
         if let labelResponse = prediction["prediction"] as? String{
-            print(labelResponse)
             predDelegate?.updateLabel(with: labelResponse)
+            pred = labelResponse
+            print("Prediction: ", labelResponse)
         }
         else{
             print("Received prediction data without label.")

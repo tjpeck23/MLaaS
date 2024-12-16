@@ -74,7 +74,9 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         DispatchQueue.main.async {
             //task
             self.mlaasmodel.uploadImageWithLabel(image: self.featureImage!, label: "")
-            
+            if self.receivedText != self.mlaasmodel.pred {
+                print(self.receivedText, " is not ", "\(self.mlaasmodel.pred)!")
+            }
         }
     }
     
