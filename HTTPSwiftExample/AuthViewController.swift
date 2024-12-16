@@ -76,6 +76,7 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             self.mlaasmodel.uploadImageWithLabel(image: self.featureImage!, label: "")
             if self.receivedText != self.mlaasmodel.pred {
                 print(self.receivedText, " is not ", "\(self.mlaasmodel.pred)!")
+                self.resetApp()
             }
         }
     }
@@ -83,6 +84,13 @@ class AuthViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
+    
+    func resetApp() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "InitialViewController")
+            appDelegate.window?.rootViewController = initialViewController
+        }
     }
     
     /*
