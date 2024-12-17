@@ -126,7 +126,6 @@ class FaceScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     // Update the UI with detected faces
     private func updateUIWithDetectedFaces() {
         print("Detected Faces: \(detectedFaces.joined(separator: ", "))")
-        // Add UI updates here, such as updating a label or table view
     }
     
     // Capture video frames and process them
@@ -136,7 +135,7 @@ class FaceScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             return
         }
         
-        // Save the pixel buffer for other uses if needed
+        
         self.currentPixelBuffer = pixelBuffer
         
         let exifOrientation = CGImagePropertyOrientation.right

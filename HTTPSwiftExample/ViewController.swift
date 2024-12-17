@@ -43,7 +43,6 @@ class ViewController: UIViewController, URLSessionDelegate, UINavigationControll
     //MARK: Setup Session and Animation
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         // setup URL Session
         // create reusable animation

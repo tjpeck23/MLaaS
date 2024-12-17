@@ -26,7 +26,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -47,7 +46,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         }
         
         
-        //let userip = ipOutlet.text ?? ""
         let label = dataLabelOutlet.text ?? ""
         
         mlaasmodel.uploadImageWithLabel(images: self.selectedImages, label: label)
@@ -65,7 +63,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
                 }
                 
                 
-                //let userip = ipOutlet.text ?? ""
                 let label = trustedPartyField.text ?? ""
                 
                 mlaasmodel.uploadSecretImage(image: self.selectedImages, trustedParties: label)
@@ -77,7 +74,6 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
     
     
     @objc func dismissKeyboard() {
-        // Resign first responder on the text fields to dismiss the keyboard
         ipOutlet.resignFirstResponder()
         dataLabelOutlet.resignFirstResponder()
     }
@@ -92,14 +88,5 @@ class DataViewController: UIViewController, PredictionDelegate, AVCaptureVideoDa
         authName.text = textField.text
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
